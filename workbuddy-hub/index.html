@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f0e8">
-  <meta name="description" content="WorkBuddy 共学入口：按工作方向进入独立学习线。">
-  <title>WorkBuddy 共学入口</title>
+  <meta name="description" content="WorkBuddy 学习中心：从基础课程到岗位实战，完成一个可检查的真实任务。">
+  <title>WorkBuddy 学习中心</title>
   <link rel="icon" href="assets/codebuddy-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,15 +13,15 @@
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="WorkBuddy 共学入口首页">
+      <a class="brand" href="index.html" aria-label="WorkBuddy 学习中心首页">
         <img src="assets/codebuddy-logo.svg" alt="">
-        <span class="brand-copy"><strong>WorkBuddy 共学入口</strong><span>按工作方向学习</span></span>
+        <span class="brand-copy"><strong>WorkBuddy 学习中心</strong><span>从认识工具到完成任务</span></span>
       </a>
-      <div class="header-context">公共入口 / <strong>先选择与你有关的方向</strong></div>
-      <nav class="header-actions" aria-label="公共课程">
-        <a class="header-link" href="resources/ai-evolution.html">AI 产品演进</a>
-        <a class="header-link mobile-keep" href="resources/bluebook-course.html">蓝皮书</a>
-        <a class="header-link" href="resources/advanced-automation.html">自动化进阶</a>
+      <div class="header-context">学习中心 / <strong>从一件具体工作开始</strong></div>
+      <nav class="header-actions" aria-label="主要内容">
+        <a class="header-link" href="#courses">公共课程</a>
+        <a class="header-link mobile-keep" href="#cases">案例精选</a>
+        <a class="header-link" href="#contribute">贡献方法</a>
       </nav>
     </div>
   </header>
@@ -30,22 +30,17 @@
     <section class="portal-top" aria-labelledby="portal-title">
       <div class="portal-intro">
         <div class="eyebrow">WorkBuddy Learning Hub</div>
-        <h1 id="portal-title">只进入与你工作有关的<em>那一条线</em></h1>
+        <h1 id="portal-title">从一件具体工作开始，<em>真正用起来</em></h1>
       </div>
       <div class="portal-brief">
-        <p>这里不是一份从头翻到尾的说明书。选择当前最接近你的工作方向，页面只保留该方向需要理解、练习和共享的内容。</p>
-        <div class="portal-rule" aria-label="内容规则">
-          <span><strong>方向内完整</strong>了解、学习、使用、共享一次走通</span>
-          <span><strong>方向间隔离</strong>进入后不展示其他方向的案例</span>
-          <span><strong>公共资料复用</strong>通用认知和视频只维护一份</span>
-        </div>
+        <p>不需要一次学会所有功能。选择当前最接近你的工作方向，跟着完成一个可以打开、检查和继续修改的结果。</p>
       </div>
     </section>
 
     <section class="direction-section" aria-labelledby="direction-title">
       <div class="direction-head">
         <h2 id="direction-title">选择你的工作方向</h2>
-        <p>每条学习线独立成页，内部不提供跨方向跳转。</p>
+        <p>从最接近当前工作的任务开始。</p>
       </div>
       <div class="direction-grid">
         <a class="direction-card" href="paths/onboarding.html">
@@ -76,7 +71,7 @@
     </section>
 
     <section id="courses" class="common-section" aria-labelledby="common-title">
-      <div class="direction-head"><h2 id="common-title">公共课程</h2><p>不属于任何一个业务方向，所有同事看到的是同一份。</p></div>
+      <div class="direction-head"><h2 id="common-title">公共课程</h2><p>先认识产品和基本操作，再进入与你工作相关的实战。</p></div>
       <div class="common-panel">
         <div class="common-panel-head"><small>Common courses / 所有人可看</small><h2>从共同认知到自动化进阶</h2></div>
         <a class="common-resource" href="resources/ai-evolution.html"><img src="assets/ai-evolution/page-01.webp" alt="AI 产品演进材料封面"><div><small>01 认知 · 9 页图解</small><strong>AI 产品为什么走向 Agent</strong><span>从聊天工具到自动化数字同事</span></div></a>
@@ -84,12 +79,28 @@
         <a class="common-resource" href="resources/advanced-automation.html"><img src="assets/advanced-automation/page-01.webp" alt="WorkBuddy 高阶自动化实战指南封面"><div><small>03 进阶 · 15 页指南</small><strong>从单次任务走向持续自动化</strong><span>Craft、批量处理、定时任务、远程控制与 Skills</span></div></a>
       </div>
     </section>
+
+    <section id="cases" class="case-preview-section" aria-labelledby="cases-title">
+      <div class="direction-head"><h2 id="cases-title">案例精选</h2><p>不必从空白指令开始，先复现一个已经整理好的方法。</p></div>
+      <div class="case-preview-grid">
+        <a class="case-preview-card" href="community/case.html?id=case-contract-warning"><span class="case-preview-type">经营 · Excel</span><h3>经营合同回款预警</h3><p>关联合同与回款数据，生成有证据的分级预警清单。</p><span class="case-preview-output">产物：预警清单 + 管理摘要</span></a>
+        <a class="case-preview-card" href="community/case.html?id=case-project-status"><span class="case-preview-type">项目 · 飞书</span><h3>项目周报风险归拢</h3><p>把碎片周报整理成项目状态表和跨部门协调事项。</p><span class="case-preview-output">产物：状态看板 + 协调清单</span></a>
+        <a class="case-preview-card" href="community/case.html?id=case-capacity"><span class="case-preview-type">管理 · 工时</span><h3>人员工作量交叉验证</h3><p>对照任务、填报和投入数据，发现偏差与过载风险。</p><span class="case-preview-output">产物：负载矩阵 + 复核清单</span></a>
+        <a class="case-preview-card" href="community/case.html?id=case-report-deck"><span class="case-preview-type">通用 · 汇报</span><h3>周报转结论型 PPT</h3><p>先重组结论和证据，再生成适合口头汇报的材料。</p><span class="case-preview-output">产物：6 页以内汇报大纲</span></a>
+      </div>
+      <div class="section-action"><a class="button button-secondary" href="community/index.html">查看全部案例</a></div>
+    </section>
+
+    <section id="contribute" class="contribute-section" aria-labelledby="contribute-title">
+      <div><div class="content-kicker">Optional / 已经跑通之后</div><h2 id="contribute-title">把一个好方法交给 WorkBuddy 整理</h2><p>当你已经有可检查的输入、过程和结果时，再让 Agent 生成脱敏预览，由你确认发布范围。</p></div>
+      <a class="button button-primary" href="contribute/index.html">贡献一个方法</a>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <div><strong>WorkBuddy 共学入口</strong><p>公共入口负责分流；每条方向页只承载本方向的学习、练习与共享方法。</p></div>
-      <div class="footer-links"><a href="https://www.codebuddy.cn/download" target="_blank" rel="noopener">官方下载</a><a href="https://www.codebuddy.cn/docs/workbuddy/Quickstart" target="_blank" rel="noopener">官方快速开始</a></div>
+      <div><strong>WorkBuddy 学习中心</strong><p>从认识工具，到完成并验收一件真实的小任务。</p></div>
+      <div class="footer-links"><a href="community/index.html">案例社区</a><a href="contribute/index.html">贡献方法</a><a href="https://www.codebuddy.cn/download" target="_blank" rel="noopener">官方下载</a></div>
     </div>
   </footer>
 </body>

@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f3f0e8">
   <meta name="description" content="WorkBuddy 综合与汇报学习线：把周报重组为结论型汇报 PPT。">
-  <title>综合与汇报 · WorkBuddy 共学入口</title>
+  <title>综合与汇报 · WorkBuddy 学习中心</title>
   <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="site-header"><div class="header-inner">
-    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>综合与汇报</strong><span>WorkBuddy 独立学习线</span></span></a>
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>综合与汇报</strong><span>材料整理与汇报实战</span></span></a>
     <div class="header-context">当前内容：<strong>材料整理与汇报表达</strong></div>
-    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/bluebook-course.html">蓝皮书</a><a class="header-link" href="../resources/advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">返回入口</a></nav>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/bluebook-course.html">蓝皮书</a><a class="header-link" href="../resources/advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">学习中心</a></nav>
   </div></header>
 
   <main id="main" class="route-main">
@@ -21,7 +21,7 @@
     </div></section>
 
     <div class="route-shell">
-      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#share">04 共享</a><div class="local-note">直接要求“把文档转成 PPT”通常只会得到内容搬家。先明确受众、结论、页数和待决策事项。</div></nav>
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#review">04 验收</a><div class="local-note">直接要求“把文档转成 PPT”通常只会得到内容搬家。先明确受众、结论、页数和待决策事项。</div></nav>
       <div class="route-content">
         <section id="understand" class="content-section">
           <div class="content-kicker">01 / 了解</div><h2>文档转 PPT 有两层任务：内容重组和文件生成</h2><p>真正耗费判断的是第一层：谁来听、最重要的结论是什么、哪些证据必须保留、哪些细节应该删掉。第二层才是版式映射和生成文件。</p>
@@ -51,15 +51,15 @@
           <div class="callout">追问示例：“请删掉重复的背景描述，把第 4 页改为‘两个节点需要本周协调’，并在每个问题后写清建议责任方和最晚确认时间。”</div>
         </section>
 
-        <section id="share" class="content-section">
-          <div class="content-kicker">04 / 共享</div><h2>把版式之前的“内容决策”一起共享</h2><p>可复用的不只是一个 PPT 模板，更包括受众、页数、标题句式、证据要求、风险与行动结构，以及生成前后的验收清单。</p>
-          <div class="prompt-panel" id="briefing-publish-prompt">我刚刚完成了“周报转结论型汇报 PPT”任务。请先读取并严格遵循当前工作空间中的 `workbuddy-hub/agent-skill/SKILL.md`。请从当前对话和成果中提取输入结构、受众约束、内容重排原则、成功提示词、PPT 输出契约和验收清单；移除真实项目、人员、数据、绝对路径和敏感信息。先生成案例或 Skill 的脱敏预览，不要直接发布。然后询问我选择个人、部门或组织范围；只有我明确确认标题、内容、脱敏结果和范围后才发布。<button class="copy-button" type="button" data-copy-target="#briefing-publish-prompt" data-copy-message="汇报方法共享指令已复制">复制</button></div>
-          <div class="review-grid"><div class="review-cell"><h3>应当保留</h3><ul><li>Markdown 或文档输入约定</li><li>受众、页数与演讲时长</li><li>结论标题和证据组织规则</li><li>大纲与文件两轮验收</li></ul></div><div class="review-cell"><h3>应当替换</h3><ul><li>真实项目与人员名称</li><li>未公开的进度和经营数字</li><li>内部模板中的敏感标识</li><li>本机路径和账号信息</li></ul></div></div>
+        <section id="review" class="content-section">
+          <div class="content-kicker">04 / 验收</div><h2>先完整讲一遍，再把文件交付出去</h2><p>一份 PPT 是否可用，要同时通过内容、数字、版面和口头表达四项检查。只看缩略图是否漂亮远远不够。</p>
+          <div class="review-grid"><div class="review-cell"><h3>内容检查</h3><ul><li>每页标题都表达了清楚结论</li><li>关键数字与原始材料逐项一致</li><li>风险后面紧跟行动和责任方向</li><li>需要协调或决策的问题没有遗漏</li></ul></div><div class="review-cell"><h3>文件与演讲检查</h3><ul><li>文字、表格和图片没有截断</li><li>所有元素可以继续编辑</li><li>总页数适合计划的汇报时长</li><li>完整讲一遍后没有明显跳跃或重复</li></ul></div></div>
+          <div class="callout">最后用 5 分钟计时讲一遍。讲不清的页面通常不是口才问题，而是页面没有形成单一结论。</div>
         </section>
       </div>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-inner"><div><strong>综合与汇报 / WorkBuddy 共学入口</strong><p>先做内容决策，再做文件生成；漂亮版面不能替代清楚结论。</p></div><div class="footer-links"><a href="../index.html">返回公共入口</a><a href="../agent-skill/SKILL.md">Agent 发布指导</a></div></div></footer>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>综合与汇报 / WorkBuddy 学习中心</strong><p>先做内容决策，再做文件生成；漂亮版面不能替代清楚结论。</p></div><div class="footer-links"><a href="../index.html">返回学习中心</a><a href="../community/index.html">案例社区</a></div></div></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
 </body>
 </html>

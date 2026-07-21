@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="把已经跑通的 WorkBuddy 工作方法整理为可复用、可脱敏、可确认范围的案例。">
+  <title>贡献方法 · WorkBuddy</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="WorkBuddy 贡献方法">
+        <img src="../assets/codebuddy-logo.svg" alt="">
+        <span class="brand-copy"><strong>贡献方法</strong><span>把一次成功整理成可复用经验</span></span>
+      </a>
+      <div class="header-context">贡献入口 / <strong>只整理已经验收的任务</strong></div>
+      <nav class="header-actions" aria-label="页面导航">
+        <a class="header-link mobile-keep" href="../index.html">学习中心</a>
+        <a class="header-link" href="../community/index.html">案例社区</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="contribute-main">
+    <section class="contribute-hero" aria-labelledby="contribute-page-title">
+      <div>
+        <div class="eyebrow">Contribute after success</div>
+        <h1 id="contribute-page-title">这件事已经跑通了吗？</h1>
+        <p>先完成任务并检查结果，再让 WorkBuddy 从当前对话中整理方法。你不需要另写一篇教程，只需要检查脱敏预览、选择发布范围并明确确认。</p>
+      </div>
+      <div class="contribute-gate" aria-label="开始贡献前的条件">
+        <span>开始条件</span>
+        <strong>有输入，有结果，也知道怎样判断结果可用</strong>
+        <p>如果任务仍在试错、结果无法复现，先回到学习中心继续完善。</p>
+      </div>
+    </section>
+
+    <section class="contribute-readiness" aria-labelledby="readiness-title">
+      <div class="contribute-section-head">
+        <div><div class="content-kicker">Before / 开始之前</div><h2 id="readiness-title">先判断现在是否适合贡献</h2></div>
+        <p>贡献的是可复现的方法，不是未经确认的聊天记录。</p>
+      </div>
+      <div class="readiness-grid">
+        <div class="readiness-item readiness-stop"><span>先不要发布</span><strong>结果还没有打开检查</strong><p>仍有明显错误，或还说不清输入、输出和适用限制。</p></div>
+        <div class="readiness-item readiness-go"><span>可以开始</span><strong>同类任务已经成功完成</strong><p>关键步骤清楚，结果可检查，也知道哪些判断必须由人完成。</p></div>
+      </div>
+    </section>
+
+    <section class="contribute-flow" aria-labelledby="flow-title">
+      <div class="contribute-section-head">
+        <div><div class="content-kicker">Flow / 四步完成</div><h2 id="flow-title">把整理工作交给 WorkBuddy</h2></div>
+        <p>发布前始终由你掌握内容和范围。</p>
+      </div>
+      <div class="contribute-steps">
+        <div class="contribute-step"><b>01</b><strong>复制指令</strong><span>在刚刚完成任务的同一对话中发送。</span></div>
+        <div class="contribute-step"><b>02</b><strong>生成预览</strong><span>Agent 提取步骤、提示词、产物和验收标准，并完成脱敏。</span></div>
+        <div class="contribute-step"><b>03</b><strong>选择范围</strong><span>由 Agent 询问个人、部门或组织范围，不替你决定。</span></div>
+        <div class="contribute-step"><b>04</b><strong>确认发布</strong><span>检查标题、类型、脱敏结果和范围后，再明确同意。</span></div>
+      </div>
+    </section>
+
+    <section class="contribute-prompt-section" aria-labelledby="agent-prompt-title">
+      <div class="contribute-section-head">
+        <div><div class="content-kicker">Agent instruction / 直接使用</div><h2 id="agent-prompt-title">把下面这段话交给 WorkBuddy</h2></div>
+        <p>建议在原任务对话中发送，Agent 才能读取完整上下文。</p>
+      </div>
+      <div class="prompt-panel contribute-prompt" id="publish-agent-prompt">我刚刚完成了一个已经确认有效的任务。请读取当前对话、输入文件结构和输出成果，并读取当前工作空间中的 workbuddy-hub/agent-skill/SKILL.md。
+
+请自动提取任务目标、输入要求、处理步骤、成功提示词、输出契约、验收标准和人工复核点；扫描并替换个人信息、真实项目名、绝对路径、凭据和业务敏感数据。
+
+先生成脱敏后的发布预览，不要直接发布。预览完成后询问我选择个人、部门或组织范围；只有我明确确认标题、类型、脱敏结果和范围后才发布。<button class="copy-button" type="button" data-copy-target="#publish-agent-prompt" data-copy-message="贡献指令已复制">复制</button></div>
+      <div class="contribute-tip"><strong>没有读取到指导文件？</strong><span>把 <code>workbuddy-hub/agent-skill/SKILL.md</code> 加入当前工作空间，再让 WorkBuddy 重新读取。不要跳过脱敏预览和范围确认。</span></div>
+    </section>
+
+    <section class="contribute-scope" aria-labelledby="scope-title">
+      <div class="contribute-section-head">
+        <div><div class="content-kicker">Scope / 发布范围</div><h2 id="scope-title">范围由你确认，不由 Agent 猜测</h2></div>
+        <p>内容越接近真实业务，越应该从更小范围开始。</p>
+      </div>
+      <div class="scope-grid">
+        <div class="scope-item"><b>个人</b><strong>先留给自己复用</strong><p>适合仍在迭代、包含个人工作习惯的方法。</p></div>
+        <div class="scope-item"><b>部门</b><strong>供同类岗位共同改进</strong><p>适合口径一致、已完成脱敏的团队方法。</p></div>
+        <div class="scope-item"><b>组织</b><strong>作为通用案例开放</strong><p>只发布无业务敏感信息、跨团队仍然适用的内容。</p></div>
+      </div>
+      <div class="review-grid contribute-review"><div class="review-cell"><h3>Agent 可以代你完成</h3><ul><li>从当前任务提取可复现步骤</li><li>生成案例或 Skill 包初稿</li><li>扫描敏感信息并制作脱敏预览</li><li>询问并记录你选择的范围</li></ul></div><div class="review-cell"><h3>必须由你确认</h3><ul><li>结果是否真的跑通并可验收</li><li>业务口径与适用限制是否准确</li><li>脱敏结果是否足够</li><li>最终标题、类型与发布范围</li></ul></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-inner"><div><strong>WorkBuddy 贡献方法</strong><p>成功之后再整理，预览之后再确认，发布之后仍可继续改进。</p></div><div class="footer-links"><a href="../index.html">学习中心</a><a href="../community/index.html">案例社区</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="../site.js" defer></script>
+</body>
+</html>

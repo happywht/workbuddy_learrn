@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f3f0e8">
   <meta name="description" content="WorkBuddy 经营与管理学习线：合同回款预警和人员工作量交叉验证。">
-  <title>经营与管理 · WorkBuddy 共学入口</title>
+  <title>经营与管理 · WorkBuddy 学习中心</title>
   <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
   <header class="site-header"><div class="header-inner">
-    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>经营与管理</strong><span>WorkBuddy 独立学习线</span></span></a>
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>经营与管理</strong><span>经营数据与资源实战</span></span></a>
     <div class="header-context">当前内容：<strong>经营分析与资源统筹</strong></div>
-    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/bluebook-course.html">蓝皮书</a><a class="header-link" href="../resources/advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">返回入口</a></nav>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/bluebook-course.html">蓝皮书</a><a class="header-link" href="../resources/advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">学习中心</a></nav>
   </div></header>
 
   <main id="main" class="route-main">
@@ -21,7 +21,7 @@
     </div></section>
 
     <div class="route-shell">
-      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#share">04 共享</a><div class="local-note">经营与人员数据敏感度高。培训只使用合成样例；真实使用前必须确认数据范围、脱敏要求和成果用途。</div></nav>
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#review">04 验收</a><div class="local-note">经营与人员数据敏感度高。培训只使用合成样例；真实使用前必须确认数据范围、脱敏要求和成果用途。</div></nav>
       <div class="route-content">
         <section id="understand" class="content-section">
           <div class="content-kicker">01 / 了解</div><h2>管理分析的价值不在“生成一张表”，而在口径可追溯</h2><p>WorkBuddy 可以快速清洗、关联和计算，但经营判断不能建立在隐藏公式或模糊阈值上。一个可用的管理成果，必须同时给出结论、计算口径、原始证据和待确认事项。</p>
@@ -69,15 +69,15 @@
           </div>
         </section>
 
-        <section id="share" class="content-section">
-          <div class="content-kicker">04 / 共享</div><h2>共享计算方法，不共享真实经营或人员数据</h2><p>Agent 应把字段契约、公式、阈值、输出和复核规则打包；原始合同、客户、人员和真实金额必须移除或替换为合成样例。</p>
-          <div class="prompt-panel" id="management-publish-prompt">我刚刚在当前对话中完成了一项经营或管理分析任务。请先读取并严格遵循当前工作空间中的 `workbuddy-hub/agent-skill/SKILL.md`，再判断更适合发布为案例还是 Skill。请提取字段契约、关联主键、时间口径、计算公式、阈值、输出结构、异常处理和人工复核点；移除或替换真实合同号、客户、人员、金额、项目、绝对路径和凭据。先生成脱敏后的发布预览，不要直接发布。然后询问我选择个人、部门或组织范围；只有我明确确认内容、脱敏结果和范围后才发布。<button class="copy-button" type="button" data-copy-target="#management-publish-prompt" data-copy-message="管理任务共享指令已复制">复制</button></div>
-          <div class="review-grid"><div class="review-cell"><h3>可以共享</h3><ul><li>字段结构与合成样例</li><li>计算公式与异常规则</li><li>提示词、输出模板、验收清单</li></ul></div><div class="review-cell"><h3>必须剥离</h3><ul><li>真实合同、客户和金额</li><li>人员姓名、工时与评价</li><li>账号、权限、绝对路径和凭据</li></ul></div></div>
+        <section id="review" class="content-section">
+          <div class="content-kicker">04 / 验收</div><h2>正式使用前，依次检查公式、证据和用途</h2><p>管理分析不能只看结果表是否整齐。至少抽查一条正常记录和一条异常记录，并确认阈值适用于当前管理目的。</p>
+          <div class="review-grid"><div class="review-cell"><h3>数据与计算</h3><ul><li>主键、时间周期和单位已经统一</li><li>截止日、回款率或偏差率可以手工复算</li><li>空值、零值和无法匹配记录被单独处理</li><li>每条异常都能回到原始记录</li></ul></div><div class="review-cell"><h3>用途与决策</h3><ul><li>预警只用于提醒，不直接认定责任</li><li>工作量结果不直接等同于绩效</li><li>建议动作考虑专业能力和项目连续性</li><li>真实数据的查看、保存和外发范围已确认</li></ul></div></div>
+          <div class="callout">任何无法解释的高风险记录，都应进入“待人工确认”清单，而不是被自动修正或隐藏。</div>
         </section>
       </div>
     </div>
   </main>
-  <footer class="site-footer"><div class="footer-inner"><div><strong>经营与管理 / WorkBuddy 共学入口</strong><p>先让异常变得可见，再让口径、证据和决策边界经得住复核。</p></div><div class="footer-links"><a href="../index.html">返回公共入口</a><a href="../agent-skill/SKILL.md">Agent 发布指导</a></div></div></footer>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>经营与管理 / WorkBuddy 学习中心</strong><p>先让异常变得可见，再让口径、证据和决策边界经得住复核。</p></div><div class="footer-links"><a href="../index.html">返回学习中心</a><a href="../community/index.html">案例社区</a></div></div></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
 </body>
 </html>

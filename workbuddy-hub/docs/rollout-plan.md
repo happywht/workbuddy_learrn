@@ -1,42 +1,50 @@
 # WorkBuddy Hub 落地计划
 
-## 目标
+## 产品目标
 
-把一次性培训资料演进为一个 Agent-native 的共建库：同事不必专门写教程，WorkBuddy 在一次任务成功后读取发布指导，自动整理草稿、询问发布范围，用户确认后发布；其他人试用、评分和提出改进建议。
+把一次性培训资料演进为一个持续学习和共建的 WorkBuddy 使用站点：
+
+1. 学习中心帮助不同岗位完成一个可检查的真实任务。
+2. 案例社区帮助用户找到、复现和改进已有方法。
+3. 贡献入口让 WorkBuddy 在任务成功后自动整理、脱敏并发布案例或 Skill。
+
+学习不被发布流程打断。贡献只发生在结果已经验收之后，并且不设置事前人工审核。
 
 ## 分阶段
 
-### Phase 0：可见的产品原型
+### Phase 0：静态可用版本（当前）
 
-- 案例搜索、场景标签、详情、版本、评分。
-- Skill 入口与 Agent 发布指导。
-- 复用 WorkBuddy 官方文档链接，不复制通用产品说明。
-- 用静态 `registry.json` 驱动演示。
+- 多页面学习中心、公共课程和四条岗位实战路径。
+- 由 `registry.json` 驱动的案例搜索、分类和详情页。
+- 案例详情包含样例、指令、处理步骤、限制和验收标准。
+- 独立贡献页与 Agent 发布指导。
+- 不展示无真实数据支撑的评分、热度、作者或排名。
 
-### Phase 1：最小后端
+### Phase 1：最小后端与身份
 
-- `registry.search`、`registry.get`、`registry.publish_preview`、`registry.publish`。
-- `registry.rate`、`registry.update`、`registry.report`、`registry.rollback`。
-- 以 `actor_context` 作为接口输入，服务端不信任浏览器传入的可见权限。
+- 接入网页端登录、用户身份、部门与组织信息。
+- 提供 `registry.search`、`registry.get`、`registry.publish_preview` 和 `registry.publish`。
+- 服务端根据身份校验个人、部门、组织范围，不信任客户端声明的权限。
 - 每个发布包保留版本、来源任务摘要、脱敏检查结果和操作审计。
 
-### Phase 2：Agent 端 PoC
+### Phase 2：Agent 自动发布 PoC
 
-- WorkBuddy 安装 `agent-skill/SKILL.md`。
-- WorkBuddy 安装自定义 MCP Connector。
-- 验证 Agent 能否把身份上下文传给 Connector。
-- 完成 `publish_preview -> scope_confirm -> publish` 三步链路。
+- WorkBuddy 安装或读取 `agent-skill/SKILL.md`。
+- 通过自定义 Skill、Connector 或 HTTP 能力连接发布服务。
+- 验证 `publish_preview -> scope_confirm -> publish` 完整链路。
+- 验证 Agent 无法绕过用户确认或扩大发布范围。
 
-### Phase 3：共建与治理
+### Phase 3：社区反馈与治理
 
-- 发布后评分、建议、版本分叉和回滚。
-- 个人、部门、组织范围的服务端授权。
-- 低评分、敏感字段、失败率等自动风险标记。
-- 保留发布，不做事前人工审核；必要时做事后下架和回滚。
+- 在真实身份和访问日志可用后开放评分、试用反馈和精选排序。
+- 支持案例修订、版本分叉、失败报告、下架和回滚。
+- 对敏感字段、低成功率和异常访问自动标记风险。
+- 保持发布后治理，不增加事前人工审批节点。
 
 ## 不变原则
 
-1. Agent 可以代用户执行，但不能代用户扩大发布范围。
-2. “用户点击确认”不等于“有权限发布”，服务端必须再次校验。
-3. Skill 与案例都必须能说明输入、输出、限制、复核点和版本。
-4. 真实项目数据默认不进入公共包，发布前由 Agent 执行脱敏检查。
+1. Agent 可以代用户整理和执行，但不能代用户扩大发布范围。
+2. 用户界面确认不等于拥有权限，服务端必须再次校验。
+3. 案例与 Skill 必须说明输入、输出、限制、复核点和版本。
+4. 真实业务数据默认不进入发布包，发布前必须生成脱敏预览。
+5. 社区指标必须来自真实行为数据，不用占位数字模拟繁荣。
