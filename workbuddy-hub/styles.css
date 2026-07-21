@@ -135,7 +135,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .direction-scope { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); color: var(--blue); font-size: 11px; }
 .direction-arrow { position: absolute; top: 18px; right: 18px; color: var(--coral); font-size: 18px; }
 .common-section { margin-top: 52px; padding-top: 24px; border-top: 1px solid var(--ink); }
-.common-section .common-panel { display: grid; grid-template-columns: repeat(2, 1fr); }
+.common-section .common-panel { display: grid; grid-template-columns: repeat(3, 1fr); }
 .common-section .common-panel-head { grid-column: 1 / -1; }
 .common-section .common-resource { border-bottom: 0; }
 .common-section .common-resource + .common-resource { border-left: 1px solid var(--line); }

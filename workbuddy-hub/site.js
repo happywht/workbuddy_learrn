@@ -93,37 +93,6 @@
     render(current);
   }
 
-  function setupVideo() {
-    const video = document.querySelector('#workbuddy-video');
-    if (!video) return;
-    const chapters = [...document.querySelectorAll('[data-video-time]')];
-    const initialTime = Math.max(Number(new URLSearchParams(location.search).get('t')) || 0, 0);
-    let pendingTime = initialTime;
-
-    const markChapter = currentTime => {
-      let activeIndex = 0;
-      chapters.forEach((chapter, index) => {
-        if (currentTime >= Number(chapter.dataset.videoTime)) activeIndex = index;
-      });
-      chapters.forEach((chapter, index) => chapter.classList.toggle('is-active', index === activeIndex));
-    };
-
-    const applyPendingTime = () => {
-      video.currentTime = Math.min(pendingTime, Math.max(video.duration - 1, 0));
-      markChapter(pendingTime);
-    };
-
-    chapters.forEach(chapter => chapter.addEventListener('click', () => {
-      pendingTime = Number(chapter.dataset.videoTime);
-      markChapter(pendingTime);
-      if (video.readyState >= 1) applyPendingTime();
-      video.play().catch(() => {});
-    }));
-    if (video.readyState >= 1) applyPendingTime();
-    else video.addEventListener('loadedmetadata', applyPendingTime, { once: true });
-    video.addEventListener('timeupdate', () => markChapter(video.currentTime));
-  }
-
   function setupCoursePlayer() {
     const video = document.querySelector('#bluebook-video');
     if (!video) return;
@@ -180,6 +149,5 @@
 
   setupProgress();
   setupPdfReader();
-  setupVideo();
   setupCoursePlayer();
 })();
