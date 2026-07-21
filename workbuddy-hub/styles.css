@@ -135,7 +135,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .direction-scope { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); color: var(--blue); font-size: 11px; }
 .direction-arrow { position: absolute; top: 18px; right: 18px; color: var(--coral); font-size: 18px; }
 .common-section { margin-top: 52px; padding-top: 24px; border-top: 1px solid var(--ink); }
-.common-section .common-panel { display: grid; grid-template-columns: repeat(3, 1fr); }
+.common-section .common-panel { display: grid; grid-template-columns: repeat(2, 1fr); }
 .common-section .common-panel-head { grid-column: 1 / -1; }
 .common-section .common-resource { border-bottom: 0; }
 .common-section .common-resource + .common-resource { border-left: 1px solid var(--line); }
@@ -260,6 +260,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .chapter-button span { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
 .chapter-button:hover, .chapter-button.is-active { border-color: var(--coral); background: var(--red-soft); }
 .media-note { width: min(1380px, calc(100% - 32px)); margin: 14px auto 0; padding: 13px 15px; border: 1px solid #ddd4c0; background: var(--gold-soft); color: #655027; font-size: 11px; }
+.course-outline { width: min(1380px, calc(100% - 32px)); margin: 24px auto 0; }
+.course-outline-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.course-outline-head h2 { margin: 0; font-size: 22px; }
+.course-outline-head p { margin: 0; color: var(--muted); font-size: 11px; }
 
 .site-footer { padding: 31px 0 37px; border-top: 1px solid var(--line); background: var(--ink); color: #e6e9e6; }
 .footer-inner { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; display: flex; align-items: start; justify-content: space-between; gap: 25px; }
@@ -336,6 +340,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .reader-stage { min-height: 330px; padding: 8px; }
   .reader-stage img { width: 100%; max-height: none; }
   .media-shell, .media-note { width: 100%; border-right: 0; border-left: 0; }
+  .course-outline { width: min(100% - 32px, var(--max)); }
+  .course-outline-head { display: block; }
+  .course-outline-head p { margin-top: 6px; }
   .video-meta { display: block; }
   .video-meta span { display: block; margin-top: 8px; }
   .chapter-sidebar { display: block; }

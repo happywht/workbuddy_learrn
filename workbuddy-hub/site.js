@@ -124,6 +124,46 @@
     video.addEventListener('timeupdate', () => markChapter(video.currentTime));
   }
 
+  function setupCoursePlayer() {
+    const video = document.querySelector('#bluebook-video');
+    if (!video) return;
+    const chapters = [...document.querySelectorAll('[data-course-chapter]')];
+    const title = document.querySelector('#course-video-title');
+    const summary = document.querySelector('#course-video-summary');
+    const duration = document.querySelector('#course-video-duration');
+    const openSource = document.querySelector('#course-open-source');
+    const requested = Number(new URLSearchParams(location.search).get('chapter')) || 1;
+
+    const selectChapter = (index, autoplay = false) => {
+      const safeIndex = Math.min(Math.max(index, 0), chapters.length - 1);
+      const chapter = chapters[safeIndex];
+      chapters.forEach((item, itemIndex) => {
+        const active = itemIndex === safeIndex;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-current', active ? 'true' : 'false');
+      });
+      video.pause();
+      video.poster = chapter.dataset.poster;
+      video.src = chapter.dataset.courseSrc;
+      video.load();
+      title.textContent = chapter.dataset.title;
+      summary.textContent = chapter.dataset.summary;
+      duration.textContent = chapter.dataset.duration;
+      openSource.href = chapter.dataset.courseSrc;
+      const url = new URL(location.href);
+      url.searchParams.set('chapter', String(safeIndex + 1));
+      history.replaceState({}, '', url);
+      if (autoplay) video.play().catch(() => {});
+    };
+
+    chapters.forEach((chapter, index) => chapter.addEventListener('click', () => selectChapter(index, true)));
+    video.addEventListener('ended', () => {
+      const activeIndex = chapters.findIndex(chapter => chapter.classList.contains('is-active'));
+      if (activeIndex >= 0 && activeIndex < chapters.length - 1) selectChapter(activeIndex + 1, true);
+    });
+    selectChapter(Math.min(Math.max(requested - 1, 0), chapters.length - 1));
+  }
+
   document.addEventListener('click', event => {
     const copyButton = event.target.closest('[data-copy-target]');
     if (copyButton) {
@@ -141,4 +181,5 @@
   setupProgress();
   setupPdfReader();
   setupVideo();
+  setupCoursePlayer();
 })();
