@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="WorkBuddy 项目与设计学习线：从周报碎片形成有证据的项目风险状态。">
+  <title>项目与设计 · WorkBuddy 共学入口</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>项目与设计</strong><span>WorkBuddy 独立学习线</span></span></a>
+    <div class="header-context">当前内容：<strong>项目推进与设计协同</strong></div>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/workbuddy-video.html">视频课程</a><a class="header-link mobile-keep" href="../index.html">返回入口</a></nav>
+  </div></header>
+
+  <main id="main" class="route-main">
+    <section class="route-hero"><div class="route-hero-inner">
+      <div><div class="eyebrow">Path 02 / Project</div><h1 class="page-title">让项目周报先变成一张可行动的状态表</h1><p class="page-lede">这条学习线只讨论项目推进：把多人、零散、口径不一的周报归拢为进度、风险、证据和下一步动作。AI 负责信息处理，人负责专业判断和协调决策。</p></div>
+      <div class="route-summary"><div class="route-summary-row"><span>适用对象</span><strong>设计人员、项目及专业负责人</strong></div><div class="route-summary-row"><span>练习用时</span><strong>15 分钟</strong></div><div class="route-summary-row"><span>目标成果</span><strong>项目状态表 + 协调清单</strong></div></div>
+    </div></section>
+
+    <div class="route-shell">
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#share">04 共享</a><div class="local-note">项目风险必须能回到周报原文。AI 可以归拢和提示，不应凭“进行中”三个字替负责人判断延期。</div></nav>
+      <div class="route-content">
+        <section id="understand" class="content-section">
+          <div class="content-kicker">01 / 了解</div><h2>项目管理的难点不是“没有周报”，而是缺少同一张图</h2><p>同一个项目可能散落在多人周报、飞书文档和基础台账里。真正有价值的输出不是一段漂亮摘要，而是把计划与实际对齐，把风险原句保留下来，再明确需要谁做什么。</p>
+          <div class="concept-row"><div class="concept-cell"><b>INPUT</b><strong>碎片信息</strong><span>成员周报、项目基础信息、计划进度和报告周期。</span></div><div class="concept-cell"><b>WORKBUDDY</b><strong>对齐与提取</strong><span>按项目合并，提取进展、风险、阻塞、动作和原文证据。</span></div><div class="concept-cell"><b>HUMAN</b><strong>判断与协调</strong><span>确认真实进度、风险级别、责任对象和资源安排。</span></div></div>
+          <div class="callout"><strong>判断边界：</strong>“未收到审查意见，可能影响下周出图”可以作为风险证据；“本周持续推进”不能单独证明延期。无法确认的内容必须标为“待人工确认”。</div>
+        </section>
+
+        <section id="learn" class="content-section">
+          <div class="content-kicker">02 / 学习</div><h2>先把项目名称、计划口径和报告周期对齐</h2><p>如果基础信息不一致，再强的模型也只会更快地产生一张错误的表。练习前先准备两份材料并确认四个问题。</p>
+          <div class="file-list"><div class="file-row"><span><strong>飞书周报碎片样例.csv</strong><span>8 条脱敏周报记录，用于提取进展、风险和下周计划</span></span><a href="../../workbuddy-training-kit/sample-data/飞书周报碎片样例.csv" download>下载样例</a></div><div class="file-row"><span><strong>项目基础信息.csv</strong><span>5 个项目，包含项目经理、计划进度和目标节点</span></span><a href="../../workbuddy-training-kit/sample-data/项目基础信息.csv" download>下载样例</a></div></div>
+          <div class="review-grid"><div class="review-cell"><h3>开始前确认</h3><ul><li>项目名称或别名能否正确匹配</li><li>计划进度对应哪个报告周期</li><li>同一项目多人记录如何合并</li><li>哪些词只能提示风险、不能直接定级</li></ul></div><div class="review-cell"><h3>飞书联动时确认</h3><ul><li>当前账号只能读取已有权限内容</li><li>周报字段是否分列或混在正文中</li><li>首次只选一个小范围文档验证</li><li>正式输出仍需项目负责人复核</li></ul></div></div>
+          <div class="connector-box"><h3>从本地样例迁移到飞书</h3><p>本地练习跑通后，再把“读取两个 CSV”改为“读取指定飞书文档或多维表格”。分析口径、输出字段和验收条件保持不变，先验证连接器能看到哪些数据。</p></div>
+        </section>
+
+        <section id="use" class="content-section">
+          <div class="content-kicker">03 / 使用</div><h2>实战：8 条周报归拢为 5 个项目状态</h2><p>先让 WorkBuddy 说明匹配和评级口径，再生成结果。不要把“做得快”放在“证据可复核”前面。</p>
+          <div class="metric-strip"><div class="metric"><strong>8 条</strong><span>成员周报碎片</span></div><div class="metric"><strong>5 个</strong><span>统一项目状态</span></div><div class="metric"><strong>2 个</strong><span>样例中明显滞后项目</span></div></div>
+          <div class="step-list"><div class="step-row"><span class="step-no">01</span><strong>按项目合并</strong><span>统一项目名称和负责人，把多人记录与基础信息对齐。</span></div><div class="step-row"><span class="step-no">02</span><strong>提取原文证据</strong><span>分别提取本周进展、风险、阻塞和下周动作，保留出处。</span></div><div class="step-row"><span class="step-no">03</span><strong>对照计划</strong><span>把计划进度和估算实际进度放在同一行，计算滞后百分点。</span></div><div class="step-row"><span class="step-no">04</span><strong>形成风险状态</strong><span>高、中、低评级必须引用原文；证据不足就标待确认。</span></div><div class="step-row"><span class="step-no">05</span><strong>形成协调动作</strong><span>列出需要谁参与、何时推进、为什么需要协调。</span></div></div>
+          <div class="prompt-panel" id="project-prompt">请读取工作空间中的 `飞书周报碎片样例.csv` 和 `项目基础信息.csv`。目标：把碎片化周报整理成统一的项目状态看板。请先说明项目名称匹配方式、报告周期和风险评级依据，确认后再输出：
+1. 项目名称、项目经理、计划进度、估算实际进度、本周进展、Top3 风险、下周关键动作；
+2. 风险状态评级高/中/低，并逐条引用周报原文证据；
+3. 实际进度低于计划进度 10 个百分点以上的滞后项目清单；
+4. 需要跨部门或管理层协调的事项清单，并标明需要谁参与；
+5. 不要仅根据“进行中”推断风险，无法确认的地方标为“待人工确认”。<button class="copy-button" type="button" data-copy-target="#project-prompt" data-copy-message="项目状态指令已复制">复制</button></div>
+          <div class="review-grid"><div class="review-cell"><h3>结果必须能回答</h3><ul><li>哪个项目落后了多少</li><li>风险判断依据是哪句原文</li><li>下一步由谁做什么</li><li>什么信息仍然缺失</li></ul></div><div class="review-cell"><h3>交付前人工复核</h3><ul><li>项目与负责人映射是否正确</li><li>实际进度是否只是模型估算</li><li>高风险是否有足够证据</li><li>协调事项是否适合正式发出</li></ul></div></div>
+          <div class="callout">样例中江北、东站项目的实际进度分别落后计划 11 和 15 个百分点。这是用于检验分析链是否跑通的参考结果，不代表真实项目结论。</div>
+        </section>
+
+        <section id="share" class="content-section">
+          <div class="content-kicker">04 / 共享</div><h2>把“项目周报归拢方法”交给 Agent 打包</h2><p>共享的是可迁移的方法：输入字段、匹配规则、证据要求、输出结构和复核边界，不是某个真实项目的数据。</p>
+          <div class="prompt-panel" id="project-publish-prompt">我刚刚完成了“项目周报风险归拢”任务。请先读取并严格遵循当前工作空间中的 `workbuddy-hub/agent-skill/SKILL.md`。请从当前对话、输入文件结构和输出成果中提取可复用方法，重点保留项目匹配、计划对照、原文证据、风险评级、协调动作和人工复核规则。请移除真实项目名、人员信息、绝对路径和业务数据，先生成发布预览，不要直接发布。然后询问我选择个人、部门或组织范围；只有我明确确认预览和范围后才发布。<button class="copy-button" type="button" data-copy-target="#project-publish-prompt" data-copy-message="项目共享指令已复制">复制</button></div>
+          <div class="review-grid"><div class="review-cell"><h3>适合打包为案例</h3><ul><li>保留一次完整输入与脱敏输出</li><li>适合第一次照着复现</li><li>重点展示证据与复核方法</li></ul></div><div class="review-cell"><h3>适合继续升级为 Skill</h3><ul><li>字段和步骤已重复验证</li><li>触发条件与失败处理明确</li><li>可以被不同项目反复调用</li></ul></div></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>项目与设计 / WorkBuddy 共学入口</strong><p>AI 先把碎片拼成有证据的状态，人再做项目判断。</p></div><div class="footer-links"><a href="../index.html">返回公共入口</a><a href="../agent-skill/SKILL.md">Agent 发布指导</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
+</body>
+</html>

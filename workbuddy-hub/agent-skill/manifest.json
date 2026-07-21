@@ -1,0 +1,19 @@
+{
+  "id": "workbuddy-publish-assistant",
+  "name": "WorkBuddy 发布助手",
+  "version": "0.1.0",
+  "entry": "SKILL.md",
+  "description": "将已确认有效的任务整理为可复用案例或 Skill，经用户确认范围后发布到 WorkBuddy Hub。",
+  "requires": {
+    "connectors": ["workbuddy-hub-registry"],
+    "tools": [
+      "registry.search",
+      "registry.publish_preview",
+      "registry.publish",
+      "registry.update"
+    ]
+  },
+  "publication_scopes": ["personal", "department", "organization"],
+  "human_confirmation_required": true,
+  "pre_publication_reviewer_required": false
+}

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="WorkBuddy 经营与管理学习线：合同回款预警和人员工作量交叉验证。">
+  <title>经营与管理 · WorkBuddy 共学入口</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>经营与管理</strong><span>WorkBuddy 独立学习线</span></span></a>
+    <div class="header-context">当前内容：<strong>经营分析与资源统筹</strong></div>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../resources/ai-evolution.html">AI 产品演进</a><a class="header-link" href="../resources/workbuddy-video.html">视频课程</a><a class="header-link mobile-keep" href="../index.html">返回入口</a></nav>
+  </div></header>
+
+  <main id="main" class="route-main">
+    <section class="route-hero"><div class="route-hero-inner">
+      <div><div class="eyebrow">Path 03 / Management</div><h1 class="page-title">先让数据把异常指出来，再由人决定怎么处理</h1><p class="page-lede">这条学习线只面向经营与管理工作：一项练习识别合同回款风险，另一项交叉验证人员工作量。两项任务都要求公式、证据和阈值透明。</p></div>
+      <div class="route-summary"><div class="route-summary-row"><span>适用对象</span><strong>经营、计划与管理人员</strong></div><div class="route-summary-row"><span>单项用时</span><strong>15-20 分钟</strong></div><div class="route-summary-row"><span>决策边界</span><strong>AI 找异常，人确认口径与行动</strong></div></div>
+    </div></section>
+
+    <div class="route-shell">
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#understand">01 了解</a><a href="#learn">02 学习</a><a href="#use">03 使用</a><a href="#share">04 共享</a><div class="local-note">经营与人员数据敏感度高。培训只使用合成样例；真实使用前必须确认数据范围、脱敏要求和成果用途。</div></nav>
+      <div class="route-content">
+        <section id="understand" class="content-section">
+          <div class="content-kicker">01 / 了解</div><h2>管理分析的价值不在“生成一张表”，而在口径可追溯</h2><p>WorkBuddy 可以快速清洗、关联和计算，但经营判断不能建立在隐藏公式或模糊阈值上。一个可用的管理成果，必须同时给出结论、计算口径、原始证据和待确认事项。</p>
+          <div class="concept-row"><div class="concept-cell"><b>RULE</b><strong>先定义口径</strong><span>基准日、账期、偏差率分母、过载阈值必须明确。</span></div><div class="concept-cell"><b>EVIDENCE</b><strong>再保留证据</strong><span>每条风险回到合同、回款、任务或工时原始记录。</span></div><div class="concept-cell"><b>DECISION</b><strong>最后由人行动</strong><span>催收、调配、绩效等管理动作不能由模型自动决定。</span></div></div>
+          <figure class="source-figure"><img src="../assets/video/frame-300.webp" alt="视频中的合同风险分析结果示例"><figcaption><strong>不是“读表”，而是执行分析链</strong>识别字段、计算指标、应用规则、输出异常，再让人复核。<a class="inline-source" href="../resources/workbuddy-video.html?t=300">从 05:00 观看表格分析</a></figcaption></figure>
+        </section>
+
+        <section id="learn" class="content-section">
+          <div class="content-kicker">02 / 学习</div><h2>两项练习共用同一套数据纪律</h2><p>先检查主键、时间和单位，再做关联计算。任何无法匹配的记录都应单列，而不是强行合并。</p>
+          <div class="step-list"><div class="step-row"><span class="step-no">01</span><strong>确认主键</strong><span>合同用合同号关联，人员数据用姓名或唯一标识关联；别名要先建立映射。</span></div><div class="step-row"><span class="step-no">02</span><strong>确认时间</strong><span>明确报告基准日或评估周期，避免同一指标跨不同时间段比较。</span></div><div class="step-row"><span class="step-no">03</span><strong>确认单位</strong><span>金额、天数、小时和投入比例保持统一，空值与零值要区分。</span></div><div class="step-row"><span class="step-no">04</span><strong>确认阈值用途</strong><span>预警用于提醒和复核，不直接等同于责任认定、绩效结论或资源调整命令。</span></div></div>
+          <div class="callout"><strong>培训规则：</strong>下面所有文件都是合成样例。迁移到真实业务数据时，应单独建立受控工作空间，并按单位要求处理合同、财务和人员信息。</div>
+        </section>
+
+        <section id="use" class="content-section" data-tab-group>
+          <div class="content-kicker">03 / 使用</div><h2>选择一项管理任务完成实战</h2><p>两项练习彼此独立。先跑与你当前工作最相关的一项，不要求一次把两个都做完。</p>
+          <div class="task-tabs" role="tablist" aria-label="经营与管理任务"><button class="task-tab is-active" type="button" role="tab" aria-selected="true" data-task-tab="contract">合同回款预警</button><button class="task-tab" type="button" role="tab" aria-selected="false" data-task-tab="capacity">人员工作量验证</button></div>
+
+          <div data-task-panel="contract" role="tabpanel">
+            <h3 class="task-panel-title">任务 A：从合同报表生成异常账款预警</h3>
+            <div class="file-list"><div class="file-row"><span><strong>经营合同与回款样例.xlsx</strong><span>合同主表、回款流水、客户信用等级和口径说明，共 12 份合同</span></span><a href="../../workbuddy-training-kit/sample-data/经营合同与回款样例.xlsx" download>下载样例</a></div></div>
+            <div class="metric-strip"><div class="metric"><strong>12 份</strong><span>合成合同记录</span></div><div class="metric"><strong>3 红 / 6 黄</strong><span>基准日 2026-07-10 的参考结果</span></div><div class="metric"><strong>4 张表</strong><span>预警、部门、客户、管理摘要</span></div></div>
+            <div class="step-list"><div class="step-row"><span class="step-no">01</span><strong>识别与清洗</strong><span>确认合同号、金额、签约日期、账期和回款记录，单列无法匹配项。</span></div><div class="step-row"><span class="step-no">02</span><strong>计算截止日</strong><span>应回款截止日 = 签约日期 + 账期天数；复杂条款必须人工确认。</span></div><div class="step-row"><span class="step-no">03</span><strong>汇总回款</strong><span>按合同号计算已回款总额、最近回款日、回款率和剩余应收。</span></div><div class="step-row"><span class="step-no">04</span><strong>应用预警规则</strong><span>按明确阈值生成红、黄、蓝、正常等级，同时保留触发原因。</span></div><div class="step-row"><span class="step-no">05</span><strong>输出与复核</strong><span>生成预警清单和管理摘要，高风险记录回到合同与回款证据。</span></div></div>
+            <div class="prompt-panel" id="contract-prompt">请分析工作空间中的 `经营合同与回款样例.xlsx`。目标：从合同主表、回款流水和客户信用等级中生成异常账款预警清单。请先识别每个工作表的字段含义，说明统计口径，并向我确认报告基准日。确认后：
+1. 按合同号汇总已回款金额和最近回款日；
+2. 根据签约日期和账期天数计算应回款截止日；
+3. 计算回款率、剩余应收、逾期天数；
+4. 按“逾期超过90天或回款率低于30%=红色高危；逾期31-90天或回款率30%-60%=黄色中危；逾期1-30天或回款率60%-80%=蓝色关注；无逾期且回款率不低于80%=正常”分级；
+5. 输出 Excel，包含预警清单、部门汇总、客户风险汇总和管理摘要；
+6. 每条风险保留原始证据行和人工复核提示。<button class="copy-button" type="button" data-copy-target="#contract-prompt" data-copy-message="合同分析指令已复制">复制</button></div>
+            <div class="review-grid"><div class="review-cell"><h3>验算</h3><ul><li>基准日与账期口径是否一致</li><li>回款是否按合同号正确汇总</li><li>逾期天数和回款率抽样重算</li><li>空值、作废合同是否正确处理</li></ul></div><div class="review-cell"><h3>决策复核</h3><ul><li>高风险是否有原始证据</li><li>信用等级是否只作辅助参考</li><li>建议动作是否需要负责人确认</li><li>正式成果是否允许包含客户信息</li></ul></div></div>
+          </div>
+
+          <div data-task-panel="capacity" role="tabpanel" class="is-hidden" hidden>
+            <h3 class="task-panel-title">任务 B：跨表验证人员工作量与投入结构</h3>
+            <div class="file-list"><div class="file-row"><span><strong>任务工时样例.csv</strong><span>11 条任务记录，包含负责人、实际工时和状态</span></span><a href="../../workbuddy-training-kit/sample-data/任务工时样例.csv" download>下载样例</a></div><div class="file-row"><span><strong>工时填报样例.csv</strong><span>11 条人员填报记录</span></span><a href="../../workbuddy-training-kit/sample-data/工时填报样例.csv" download>下载样例</a></div><div class="file-row"><span><strong>人员投入样例.csv</strong><span>人员在多个项目间的投入比例</span></span><a href="../../workbuddy-training-kit/sample-data/人员投入样例.csv" download>下载样例</a></div></div>
+            <div class="metric-strip"><div class="metric"><strong>3 张表</strong><span>任务、填报、项目投入</span></div><div class="metric"><strong>&gt;30%</strong><span>偏差复核阈值</span></div><div class="metric"><strong>4 人</strong><span>样例中需复核偏差</span></div></div>
+            <div class="step-list"><div class="step-row"><span class="step-no">01</span><strong>统一人员与周期</strong><span>建立姓名映射，明确评估起止日期和最小统计粒度。</span></div><div class="step-row"><span class="step-no">02</span><strong>交叉计算</strong><span>按人汇总任务实际工时、填报工时、完成任务数和项目投入比例。</span></div><div class="step-row"><span class="step-no">03</span><strong>识别偏差</strong><span>明确偏差率公式与分母，对超过 30% 的记录保留明细证据。</span></div><div class="step-row"><span class="step-no">04</span><strong>生成矩阵</strong><span>输出人员×日期热力图数据和人员×项目投入矩阵。</span></div><div class="step-row"><span class="step-no">05</span><strong>形成建议</strong><span>把过载、可承接和异常填报分开，建议同时说明专业与项目连续性限制。</span></div></div>
+            <div class="prompt-panel" id="capacity-prompt">请分析工作空间中的 `任务工时样例.csv`、`工时填报样例.csv` 和 `人员投入样例.csv`。请先列出人员匹配方式、评估周期、统计口径、偏差率公式和异常阈值，等我确认后再执行：
+1. 计算每人的任务实际工时、填报工时和偏差率；
+2. 汇总每人当前项目投入比例；
+3. 按“日均实际工时超过10小时=过载；日均实际工时低于4小时且任务完成数偏低=可承接；实际工时与填报工时偏差超过30%=填报异常”生成清单；
+4. 输出人员×日期热力图数据、人员×项目投入矩阵和调整建议；
+5. 所有异常保留原始记录依据，并明确这些结果只用于复核，不作为绩效结论。<button class="copy-button" type="button" data-copy-target="#capacity-prompt" data-copy-message="工作量分析指令已复制">复制</button></div>
+            <div class="review-grid"><div class="review-cell"><h3>数据复核</h3><ul><li>姓名与项目映射是否正确</li><li>会议、培训等工时如何处理</li><li>偏差率分母是否明确且非零</li><li>投入比例与工时是否同一周期</li></ul></div><div class="review-cell"><h3>用途边界</h3><ul><li>工时不能等同于实际价值</li><li>不同专业产出不可简单横比</li><li>可承接仍需考虑能力与连续性</li><li>结果不得直接形成绩效判断</li></ul></div></div>
+          </div>
+        </section>
+
+        <section id="share" class="content-section">
+          <div class="content-kicker">04 / 共享</div><h2>共享计算方法，不共享真实经营或人员数据</h2><p>Agent 应把字段契约、公式、阈值、输出和复核规则打包；原始合同、客户、人员和真实金额必须移除或替换为合成样例。</p>
+          <div class="prompt-panel" id="management-publish-prompt">我刚刚在当前对话中完成了一项经营或管理分析任务。请先读取并严格遵循当前工作空间中的 `workbuddy-hub/agent-skill/SKILL.md`，再判断更适合发布为案例还是 Skill。请提取字段契约、关联主键、时间口径、计算公式、阈值、输出结构、异常处理和人工复核点；移除或替换真实合同号、客户、人员、金额、项目、绝对路径和凭据。先生成脱敏后的发布预览，不要直接发布。然后询问我选择个人、部门或组织范围；只有我明确确认内容、脱敏结果和范围后才发布。<button class="copy-button" type="button" data-copy-target="#management-publish-prompt" data-copy-message="管理任务共享指令已复制">复制</button></div>
+          <div class="review-grid"><div class="review-cell"><h3>可以共享</h3><ul><li>字段结构与合成样例</li><li>计算公式与异常规则</li><li>提示词、输出模板、验收清单</li></ul></div><div class="review-cell"><h3>必须剥离</h3><ul><li>真实合同、客户和金额</li><li>人员姓名、工时与评价</li><li>账号、权限、绝对路径和凭据</li></ul></div></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>经营与管理 / WorkBuddy 共学入口</strong><p>先让异常变得可见，再让口径、证据和决策边界经得住复核。</p></div><div class="footer-links"><a href="../index.html">返回公共入口</a><a href="../agent-skill/SKILL.md">Agent 发布指导</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
+</body>
+</html>

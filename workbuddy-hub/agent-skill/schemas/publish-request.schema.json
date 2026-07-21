@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workbuddy-hub.local/schemas/publish-request.schema.json",
+  "title": "WorkBuddy Hub Publish Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["preview_id", "confirmed_scope", "confirmation"],
+  "properties": {
+    "preview_id": { "type": "string", "minLength": 8 },
+    "confirmed_scope": { "enum": ["personal", "department", "organization"] },
+    "target_department_id": { "type": ["string", "null"] },
+    "confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confirmed", "confirmed_at"],
+      "properties": {
+        "confirmed": { "const": true },
+        "confirmed_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
