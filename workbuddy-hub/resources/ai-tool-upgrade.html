@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="AI 工具升级地图：从聊天机器人到操作型智能体，再到百花齐放的 2026 工具生态。">
+  <title>AI 工具升级地图 · WorkBuddy 学习中心</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+  <style>
+    :root { --upgrade-purple: #6c5ce7; --upgrade-cyan: #00b894; --upgrade-pink: #e84393; --upgrade-indigo: #0984e3; }
+    .upgrade-hero { background: linear-gradient(135deg, #1e272e 0%, #2d3436 100%); color: #dfe6e9; }
+    .upgrade-hero .page-title { color: #fff; }
+    .upgrade-hero .page-lede { color: #b2bec3; }
+    .upgrade-hero .eyebrow { color: #74b9ff; }
+    .upgrade-hero .eyebrow::before { background: #74b9ff; }
+
+    .era-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 26px; }
+    .era-card { position: relative; padding: 22px; border: 1px solid var(--line); background: var(--surface); overflow: hidden; }
+    .era-card::before { content: attr(data-era); position: absolute; top: 10px; right: 14px; font-size: 48px; font-weight: 950; color: rgba(0,0,0,.04); line-height: 1; }
+    .era-card h3 { margin: 0 0 10px; font-size: 20px; }
+    .era-card .era-date { display: inline-block; margin-bottom: 12px; padding: 4px 8px; border-radius: 3px; background: var(--blue-soft); color: var(--blue); font-size: 11px; font-weight: 800; }
+    .era-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .era-card ul { margin: 14px 0 0; padding: 0; list-style: none; font-size: 12px; }
+    .era-card li { position: relative; padding: 5px 0 5px 16px; color: var(--ink); }
+    .era-card li::before { content: "→"; position: absolute; left: 0; color: var(--coral); font-weight: 800; }
+
+    .radar-wrap { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 36px; align-items: center; margin-top: 26px; }
+    .radar { position: relative; width: 260px; height: 260px; }
+    .radar-bg { position: absolute; inset: 0; border-radius: 50%; background:
+      repeating-radial-gradient(circle at center, transparent 0 38px, rgba(0,0,0,.06) 39px 40px),
+      conic-gradient(from 0deg, rgba(116,185,255,.25) 0 72deg, rgba(0,184,148,.25) 72deg 144deg, rgba(232,67,147,.25) 144deg 216deg, rgba(108,92,231,.25) 216deg 288deg, rgba(9,132,227,.25) 288deg 360deg); }
+    .radar-axis { position: absolute; top: 50%; left: 50%; width: 50%; height: 1px; background: rgba(0,0,0,.12); transform-origin: 0 50%; }
+    .radar-axis:nth-child(1) { transform: rotate(-90deg); }
+    .radar-axis:nth-child(2) { transform: rotate(-18deg); }
+    .radar-axis:nth-child(3) { transform: rotate(54deg); }
+    .radar-axis:nth-child(4) { transform: rotate(126deg); }
+    .radar-axis:nth-child(5) { transform: rotate(198deg); }
+    .radar-label { position: absolute; font-size: 11px; font-weight: 800; color: var(--ink); transform: translate(-50%, -50%); }
+    .radar-label:nth-child(6) { top: 8%; left: 50%; }
+    .radar-label:nth-child(7) { top: 32%; left: 92%; }
+    .radar-label:nth-child(8) { top: 82%; left: 80%; }
+    .radar-label:nth-child(9) { top: 82%; left: 20%; }
+    .radar-label:nth-child(10) { top: 32%; left: 8%; }
+    .radar-poly { position: absolute; inset: 0; }
+    .radar-poly svg { width: 100%; height: 100%; }
+    .radar-legend { display: grid; gap: 10px; }
+    .radar-legend-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .radar-legend-color { width: 14px; height: 14px; border-radius: 3px; }
+
+    .matrix { display: grid; grid-template-columns: 120px repeat(5, 1fr); gap: 1px; margin-top: 26px; border: 1px solid var(--line); background: var(--line); font-size: 12px; }
+    .matrix > div { padding: 14px; background: var(--surface); display: grid; place-items: center start; }
+    .matrix-head { background: var(--ink) !important; color: #fff; font-weight: 700; }
+    .matrix-rowhead { background: var(--paper-2) !important; font-weight: 700; }
+    .matrix .check { color: var(--green); font-weight: 900; }
+    .matrix .partial { color: var(--gold); font-weight: 900; }
+    .matrix .cross { color: var(--coral); font-weight: 900; }
+
+    .landscape { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 26px; }
+    .landscape-card { padding: 18px; border: 1px solid var(--line); background: var(--surface); }
+    .landscape-card .landscape-cat { display: inline-block; margin-bottom: 10px; padding: 3px 8px; border-radius: 3px; background: var(--gold-soft); color: #6a5227; font-size: 10px; font-weight: 800; }
+    .landscape-card h3 { margin: 0 0 8px; font-size: 16px; }
+    .landscape-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .landscape-card .landscape-tools { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--blue); font-weight: 700; }
+
+    .decision-tree { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 26px; align-items: stretch; }
+    .decision-node { padding: 18px; border: 1px solid var(--line); background: var(--surface); text-align: center; }
+    .decision-node b { display: grid; place-items: center; width: 32px; height: 32px; margin: 0 auto 10px; border-radius: 50%; background: var(--coral); color: #fff; font-size: 12px; }
+    .decision-node strong { display: block; font-size: 14px; }
+    .decision-node span { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+    .decision-arrow { display: grid; place-items: center; color: var(--line-dark); font-size: 24px; font-weight: 900; }
+
+    .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+    .tip-card { padding: 16px; border-left: 4px solid var(--blue); background: var(--blue-soft); }
+    .tip-card h4 { margin: 0 0 6px; font-size: 14px; color: var(--blue); }
+    .tip-card p { margin: 0; font-size: 12px; color: #496267; }
+
+    .evolution-chart { margin-top: 26px; }
+    .evolution-row { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .evolution-row:last-child { border-bottom: 0; }
+    .evolution-row strong { font-size: 13px; }
+    .evolution-bar { height: 28px; border-radius: 4px; background: var(--line); overflow: hidden; }
+    .evolution-bar span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--upgrade-cyan)); color: #fff; font-size: 11px; font-weight: 800; line-height: 28px; padding: 0 10px; white-space: nowrap; }
+
+    @media (max-width: 1100px) {
+      .matrix { grid-template-columns: 100px repeat(5, 1fr); font-size: 11px; }
+      .matrix > div { padding: 10px 8px; }
+    }
+    @media (max-width: 980px) {
+      .era-grid { grid-template-columns: 1fr; }
+      .radar-wrap { grid-template-columns: 1fr; justify-items: center; }
+      .matrix { grid-template-columns: 90px repeat(5, 1fr); font-size: 10px; }
+      .matrix > div { padding: 10px 6px; }
+      .decision-tree { grid-template-columns: 1fr 1fr; }
+      .decision-arrow { display: none; }
+      .tip-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .matrix { grid-template-columns: 1fr; }
+      .matrix > div { place-items: center start; }
+      .decision-tree { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>AI 工具升级地图</strong><span>从聊天机器人到百花齐放</span></span></a>
+    <div class="header-context">公共资料 / <strong>所有方向均可访问</strong></div>
+    <nav class="header-actions" aria-label="资源导航"><a class="header-link" href="ai-evolution.html">AI 产品演进</a><a class="header-link" href="ai-tool-upgrade.html">工具升级</a><a class="header-link" href="codex-guide.html">Codex 指南</a><a class="header-link" href="bluebook-course.html">蓝皮书</a><a class="header-link" href="advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">学习中心</a></nav>
+  </div></header>
+
+  <main id="main" class="route-main">
+    <section class="route-hero upgrade-hero"><div class="route-hero-inner">
+      <div>
+        <div class="eyebrow">AI Tool Landscape 2026</div>
+        <h1 class="page-title">AI 工具不是越来越聪明，而是越来越会做事</h1>
+        <p class="page-lede">从只能回答问题的聊天机器人，到以 OpenClaw 为代表、能直接操作电脑与系统的操作型智能体，再到今天面向不同岗位百花齐放的专用工具。理解这条升级线，能帮你更快选对工具、用对场景。</p>
+      </div>
+      <div class="route-summary"><div class="route-summary-row"><span>覆盖范围</span><strong>三代工具 + 12+ 代表产品</strong></div><div class="route-summary-row"><span>学习目标</span><strong>看懂能力边界，学会选型</strong></div><div class="route-summary-row"><span>预计用时</span><strong>15 分钟</strong></div></div>
+    </div></section>
+
+    <div class="route-shell">
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#eras">01 三代工具</a><a href="#capabilities">02 能力对比</a><a href="#landscape">03 工具生态</a><a href="#matrix">04 选型矩阵</a><a href="#howto">05 怎么开始</a><a href="#trends">06 未来趋势</a><div class="local-note">工具更新很快，本页以 2026 年中主流能力为参考，具体以各产品当前版本为准。</div></nav>
+      <div class="route-content">
+
+        <section id="eras" class="content-section">
+          <div class="content-kicker">01 / 三代工具</div>
+          <h2>聊天机器人 → 操作型智能体 → 百花齐放</h2>
+          <p>AI 产品的升级并不是简单的“模型变强”，而是交互方式、执行边界和 responsibility 模型都在变化。下面是三代典型形态。</p>
+          <div class="era-grid">
+            <article class="era-card" data-era="01">
+              <span class="era-date">2022-2023</span>
+              <h3>聊天机器人 Chatbot</h3>
+              <p>用户输入问题，模型返回文字答案。它知道很多，但不能执行动作，也不能持久化结果。</p>
+              <ul><li>代表：ChatGPT、Claude、文心一言</li><li>核心能力：问答、写作、翻译、头脑风暴</li><li>局限：无法访问文件系统、不能运行代码、结果不可下载</li></ul>
+            </article>
+            <article class="era-card" data-era="02">
+              <span class="era-date">2024-2025</span>
+              <h3>操作型智能体 Operator</h3>
+              <p>模型开始具备“工具使用”和“环境操作”能力，可以读取文件、调用 API、控制浏览器或电脑界面，完成多步骤任务。</p>
+              <ul><li>代表：OpenClaw、OpenAI Operator、Claude Computer Use、WorkBuddy</li><li>核心能力：文件读写、网页操作、连接器调用、本地/云端执行</li><li>局限：需要明确边界，复杂任务仍需人工确认</li></ul>
+            </article>
+            <article class="era-card" data-era="03">
+              <span class="era-date">2025-2026</span>
+              <h3>百花齐放专用工具</h3>
+              <p>不同厂商把通用能力封装成面向特定岗位和场景的产品：编程、研究、汇报、设计、数据分析、流程自动化。</p>
+              <ul><li>代表：Codex、Cursor、Perplexity、Gamma、Manus</li><li>核心能力：端到端交付、垂直场景优化</li><li>趋势：通用对话入口 + 垂直 Agent 并存</li></ul>
+            </article>
+          </div>
+          <div class="highlight-box" style="margin-top:28px;">
+            <strong>OpenClaw 是什么？</strong>
+            <p style="margin-top:8px;">OpenClaw 是 2025 年底起快速走热的开源 AI 智能体框架，也被戏称为“龙虾”。它把大模型与本地操作系统、浏览器、通讯工具（Slack / Telegram / Discord 等）连接起来，让 Agent 可以自主执行文件操作、网页浏览、定时任务和多步骤工作流。商汤“办公小浣熊”等国产办公助手也已通过 Raccoon Skills 接入 OpenClaw 生态，为其增加 Excel 处理、数据分析、报告生成等办公能力。</p>
+            <p style="margin-top:8px;"><strong>为什么它成了关键节点？</strong> OpenClaw 让“模型会回答”真正走向“模型会执行”，而且支持本地部署，这对在意数据隐私和私有化交付的团队尤其有吸引力。但它也带来明确的安全边界要求：Agent 拥有系统级执行权限，必须在受控环境或隔离设备上运行。</p>
+          </div>
+          <figure class="source-figure" style="margin-top:28px;"><img src="../assets/ai-evolution/page-07.webp" alt="2026 AI 产品生态对比"><figcaption><strong>每一代工具都保留了前一代的能力，并新增了执行层</strong>今天最好的工作方式，往往是“用聊天工具想思路，用操作型 Agent 跑任务，用专用工具做交付”。<a class="inline-source" href="ai-evolution.html?page=7">查看原演进材料</a></figcaption></figure>
+        </section>
+
+        <section id="capabilities" class="content-section">
+          <div class="content-kicker">02 / 能力对比</div>
+          <h2>五代能力雷达：从“会说”到“会交付”</h2>
+          <p>评估一个 AI 工具，不能只看模型大小，而要看它在五个维度上的表现：知识、推理、工具使用、执行环境和交付形态。</p>
+          <div class="radar-wrap">
+            <div class="radar" role="img" aria-label="五代 AI 工具能力雷达图">
+              <div class="radar-bg"></div>
+              <div class="radar-axis"></div><div class="radar-axis"></div><div class="radar-axis"></div><div class="radar-axis"></div><div class="radar-axis"></div>
+              <div class="radar-label">知识问答</div><div class="radar-label">文本生成</div><div class="radar-label">工具调用</div><div class="radar-label">环境操作</div><div class="radar-label">端到端交付</div>
+              <div class="radar-poly">
+                <svg viewBox="0 0 260 260" preserveAspectRatio="none">
+                  <polygon points="130,35 215,95 200,205 75,205 50,95" fill="rgba(116,185,255,.2)" stroke="#74b9ff" stroke-width="2"/>
+                  <polygon points="130,55 200,100 185,190 90,190 65,100" fill="rgba(0,184,148,.15)" stroke="#00b894" stroke-width="2"/>
+                  <polygon points="130,75 185,110 170,175 105,175 85,110" fill="rgba(232,67,147,.15)" stroke="#e84393" stroke-width="2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="radar-legend">
+              <div class="radar-legend-item"><span class="radar-legend-color" style="background:#74b9ff;"></span><strong>第一代 Chatbot：</strong>知识问答和文本生成强，但缺少工具调用与环境操作。</div>
+              <div class="radar-legend-item"><span class="radar-legend-color" style="background:#00b894;"></span><strong>第二代 Operator：</strong>工具调用与环境操作大幅提升，开始能交付文件和结果。</div>
+              <div class="radar-legend-item"><span class="radar-legend-color" style="background:#e84393;"></span><strong>第三代 专用工具：</strong>端到端交付最强，每个产品都围绕特定岗位优化体验。</div>
+              <div class="radar-legend-item" style="margin-top:10px;color:var(--muted);font-size:12px;">说明：雷达图用相对评分示意能力分布，不代表官方评测数据。实际能力因版本和配置而异。</div>
+            </div>
+          </div>
+
+          <div class="evolution-chart" style="margin-top:36px;">
+            <h3 style="font-size:18px;margin-bottom:6px;">关键能力成熟度变化</h3>
+            <div class="evolution-row"><strong>知识问答</strong><div class="evolution-bar"><span style="width:95%">95%</span></div></div>
+            <div class="evolution-row"><strong>文本生成</strong><div class="evolution-bar"><span style="width:92%">92%</span></div></div>
+            <div class="evolution-row"><strong>工具调用</strong><div class="evolution-bar"><span style="width:78%">78%</span></div></div>
+            <div class="evolution-row"><strong>环境操作</strong><div class="evolution-bar"><span style="width:65%">65%</span></div></div>
+            <div class="evolution-row"><strong>端到端交付</strong><div class="evolution-bar"><span style="width:58%">58%</span></div></div>
+          </div>
+        </section>
+
+        <section id="landscape" class="content-section">
+          <div class="content-kicker">03 / 工具生态</div>
+          <h2>2026 年主流 AI 工具分类地图</h2>
+          <p>下面按“通用对话、编程、研究、办公自动化、内容创作、数据分析”六个大类整理代表性工具。每个岗位通常只需要精通 2-3 个。</p>
+          <div class="landscape">
+            <article class="landscape-card">
+              <span class="landscape-cat">通用对话</span>
+              <h3>大模型入口</h3>
+              <p>适合快速问答、头脑风暴、文本润色和跨领域知识查询。是所有 AI 工具的基础层。</p>
+              <div class="landscape-tools">ChatGPT · Claude · Gemini · 豆包 · Kimi</div>
+            </article>
+            <article class="landscape-card">
+              <span class="landscape-cat">编程开发</span>
+              <h3>代码智能体</h3>
+              <p>理解需求后直接写代码、运行测试、修复 Bug。适合数据分析、脚本、原型开发和接口调试。</p>
+              <div class="landscape-tools">Codex · Cursor · GitHub Copilot · Claude Code</div>
+            </article>
+            <article class="landscape-card">
+              <span class="landscape-cat">研究分析</span>
+              <h3>搜索与推理</h3>
+              <p>连接实时搜索、学术数据库或企业内部知识库，给出带来源的综述和对比分析。</p>
+              <div class="landscape-tools">Perplexity ·秘塔 AI 搜索 · Grok · NotebookLM</div>
+            </article>
+            <article class="landscape-card">
+              <span class="landscape-cat">办公自动化</span>
+              <h3>桌面/云端 Agent</h3>
+              <p>在授权范围内操作本地文件、Office、飞书、邮件，完成重复性办公任务。OpenClaw 更偏向系统级执行与多通道接入。</p>
+              <div class="landscape-tools">WorkBuddy · OpenClaw · OpenAI Operator · 影刀 · Make</div>
+            </article>
+            <article class="landscape-card">
+              <span class="landscape-cat">内容创作</span>
+              <h3>多媒体生成</h3>
+              <p>生成图片、视频、PPT、音频和网页原型。适合营销、设计、培训和汇报场景。</p>
+              <div class="landscape-tools">Midjourney · Gamma · 可灵 · Suno · Recraft</div>
+            </article>
+            <article class="landscape-card">
+              <span class="landscape-cat">数据分析</span>
+              <h3>表格与 BI</h3>
+              <p>直接读取表格、生成图表、写 SQL、做预测。适合经营、财务、项目管理岗位。</p>
+              <div class="landscape-tools">ChatGPT Advanced Data Analysis · Julius · Tableau AI</div>
+            </article>
+          </div>
+          <div class="highlight-box" style="margin-top:24px;"><strong>不要追求“一个工具做所有事”。</strong>把通用模型当入口，把专用工具当执行器，把 WorkBuddy/Codex 这类 Agent 当本地与云端之间的桥梁，是更现实的用法。</div>
+        </section>
+
+        <section id="matrix" class="content-section">
+          <div class="content-kicker">04 / 选型矩阵</div>
+          <h2>按任务类型快速选型</h2>
+          <p>下面矩阵不是绝对结论，而是帮助你建立“先判断任务类型，再挑工具”的习惯。</p>
+          <div class="matrix" role="table" aria-label="AI 工具选型矩阵">
+            <div class="matrix-head">任务类型</div><div class="matrix-head">通用对话</div><div class="matrix-head">WorkBuddy</div><div class="matrix-head">OpenClaw</div><div class="matrix-head">Codex</div><div class="matrix-head">研究/创作工具</div>
+            <div class="matrix-rowhead">写文案、润色</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="partial">△</span> 可用</div>
+            <div class="matrix-rowhead">Excel/表格处理</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="partial">△</span> 可用</div>
+            <div class="matrix-rowhead">写代码、跑脚本</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div>
+            <div class="matrix-rowhead">飞书/邮件自动化</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div>
+            <div class="matrix-rowhead">系统级/定时任务</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div>
+            <div class="matrix-rowhead">信息检索与综述</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div>
+            <div class="matrix-rowhead">PPT/视觉汇报</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div><div class="matrix-cell"><span class="cross">×</span> 不推荐</div><div class="matrix-cell"><span class="partial">△</span> 可用</div><div class="matrix-cell"><span class="check">★</span> 最佳</div>
+          </div>
+          <p class="scroll-hint">提示：在窄屏设备上可以左右滑动查看完整矩阵。</p>
+          <p style="margin-top:14px;color:var(--muted);font-size:12px;">图例：★ 最佳 · △ 可用 · × 不推荐。实际选择时还要考虑数据安全、单位授权和当前账号权限。</p>
+
+          <h3 style="margin-top:32px;font-size:18px;">四步选型法</h3>
+          <div class="decision-tree">
+            <div class="decision-node"><b>1</b><strong>判断任务类型</strong><span>是问答、写作、代码、表格还是自动化？</span></div>
+            <div class="decision-node"><b>2</b><strong>确认数据位置</strong><span>数据在本地、飞书、云端还是数据库？</span></div>
+            <div class="decision-node"><b>3</b><strong>评估安全边界</strong><span>能否上传云端？是否需要单位授权？</span></div>
+            <div class="decision-node"><b>4</b><strong>选择输出形态</strong><span>需要 .xlsx、.pptx、代码、报告还是网页？</span></div>
+          </div>
+        </section>
+
+        <section id="howto" class="content-section">
+          <div class="content-kicker">05 / 怎么开始</div>
+          <h2>不同岗位的起步建议</h2>
+          <p>与其追逐新产品，不如先把手头最高频、最重复、结果最好检查的任务跑通。下面是几个典型岗位的起步组合。</p>
+          <div class="tip-grid">
+            <div class="tip-card"><h4>设计 / 项目岗位</h4><p>先用 WorkBuddy 把“周报汇总、PPT 大纲、资料检查”跑通；再用通用模型辅助写方案说明和技术对比。</p></div>
+            <div class="tip-card"><h4>经营 / 管理岗位</h4><p>从 Excel 报表自动化开始：合同回款预警、项目成本汇总、经营看板。WorkBuddy 处理本地表格，Codex 处理复杂统计。</p></div>
+            <div class="tip-card"><h4>数据 / 技术岗位</h4><p>用 Codex 完成数据清洗、接口调试和脚本原型；用 WorkBuddy 把结果转换成业务人员能看懂的 Office 材料。</p></div>
+            <div class="tip-card"><h4>综合 / 行政岗位</h4><p>把通知起草、会议纪要整理、汇报材料排版交给通用对话工具；把周期性汇总和飞书协同交给 WorkBuddy。</p></div>
+          </div>
+          <div class="callout" style="margin-top:24px;"><strong>关键原则：</strong>每次只引入一个工具，先在一个小任务上跑通“输入 → 执行 → 检查 → 复用”的闭环，再扩大范围。</div>
+        </section>
+
+        <section id="trends" class="content-section">
+          <div class="content-kicker">06 / 未来趋势</div>
+          <h2>接下来会往哪走</h2>
+          <p>工具形态还会继续分化，但几个方向已经比较明确。提前理解这些趋势，能帮助你更好地规划学习和落地节奏。</p>
+          <div class="concept-row">
+            <div class="concept-cell"><b>趋势 01</b><strong>模型即基础设施</strong><span>通用大模型会越来越像“水电煤”，真正差异化的是垂直场景封装和权限控制。</span></div>
+            <div class="concept-cell"><b>趋势 02</b><strong>多 Agent 协作</strong><span>一个复杂任务会被拆成多个 Specialist Agent，分别负责搜索、编码、校验、汇报。</span></div>
+            <div class="concept-cell"><b>趋势 03</b><strong>企业级权限与审计</strong><span>单位会更关注“谁能访问什么、做了什么、结果可审计”，而不仅是模型能力。</span></div>
+          </div>
+          <div class="concept-row" style="margin-top:0;">
+            <div class="concept-cell"><b>趋势 04</b><strong>人机回环成为默认</strong><span>越是重要任务，越需要人在关键节点确认。完全无人值守只适用于低风险、高重复场景。</span></div>
+            <div class="concept-cell"><b>趋势 05</b><strong>提示词工程让位于工作流编排</strong><span>个人靠一条好提示词取胜，团队靠把提示词、工具、检查点编排成可复用工作流取胜。</span></div>
+            <div class="concept-cell"><b>趋势 06</b><strong>数据资产比工具更重要</strong><span>同样的工具，谁能整理出高质量、可复用的内部数据和 SOP，谁就能更快拿到好结果。</span></div>
+          </div>
+          <figure class="source-figure" style="margin-top:28px;"><img src="../assets/ai-evolution/page-09.webp" alt="从提示词工程到工作流编排"><figcaption><strong>从“写好一句话”到“搭好一条工作流”</strong>未来竞争的不是会不会用某个工具，而是能不能把业务知识固化为可复用的 Agent 工作流。<a class="inline-source" href="ai-evolution.html?page=9">查看完整材料</a></figcaption></figure>
+        </section>
+
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>AI 工具升级地图 / WorkBuddy 学习中心</strong><p>工具在快速迭代，但“理解任务类型、选对工具、建立检查闭环”的能力长期有效。</p></div><div class="footer-links"><a href="../index.html">返回学习中心</a><a href="codex-guide.html">Codex 使用指南</a><a href="ai-evolution.html">AI 产品演进</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
+</body>
+</html>

@@ -147,7 +147,54 @@
     if (tabButton) activateTaskTab(tabButton);
   });
 
+  function setupScrollSpy() {
+    const nav = document.querySelector('.local-nav');
+    if (!nav) return;
+    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    const targets = links.map(link => {
+      const id = link.getAttribute('href').slice(1);
+      return document.getElementById(id);
+    }).filter(Boolean);
+    if (targets.length === 0) return;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const activeLink = links.find(link => link.getAttribute('href') === `#${entry.target.id}`);
+          links.forEach(link => link.classList.remove('is-active'));
+          if (activeLink) activeLink.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-15% 0px -55% 0px', threshold: 0 });
+
+    targets.forEach(target => observer.observe(target));
+  }
+
+  function setupBackToTop() {
+    let button = document.querySelector('.back-to-top');
+    if (!button) {
+      button = document.createElement('button');
+      button.className = 'back-to-top';
+      button.setAttribute('type', 'button');
+      button.setAttribute('aria-label', '返回顶部');
+      button.textContent = '↑';
+      document.body.appendChild(button);
+    }
+
+    const toggle = () => {
+      button.classList.toggle('is-visible', window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', toggle, { passive: true });
+    button.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    toggle();
+  }
+
   setupProgress();
   setupPdfReader();
   setupCoursePlayer();
+  setupScrollSpy();
+  setupBackToTop();
 })();

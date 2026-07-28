@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="Codex 专项使用指南：从理解云端代码智能体到完成第一个可运行脚本与数据分析任务。">
+  <title>Codex 使用指南 · WorkBuddy 学习中心</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+  <style>
+    .codex-hero { background: linear-gradient(135deg, #1a2332 0%, #0f1724 100%); color: #e8eef6; }
+    .codex-hero .page-title { color: #fff; }
+    .codex-hero .page-lede { color: #aab7c9; }
+    .codex-hero .eyebrow { color: #74b9ff; }
+    .codex-hero .eyebrow::before { background: #74b9ff; }
+    .codex-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 4px; background: rgba(116,185,255,.15); color: #74b9ff; font-size: 11px; font-weight: 800; }
+    .timeline { position: relative; margin-top: 28px; padding-left: 24px; border-left: 2px solid var(--line-dark); }
+    .timeline-item { position: relative; padding: 0 0 28px 24px; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item::before { content: attr(data-year); position: absolute; left: -44px; top: 0; width: 40px; text-align: right; color: var(--coral); font-size: 11px; font-weight: 800; }
+    .timeline-item::after { content: ""; position: absolute; left: -31px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--coral); border: 2px solid var(--paper); }
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 24px; }
+    .tool-card { padding: 18px; border: 1px solid var(--line); background: var(--surface); }
+    .tool-card h3 { margin: 0 0 8px; font-size: 15px; }
+    .tool-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .tool-card .tag { display: inline-block; margin-top: 10px; padding: 3px 7px; border-radius: 3px; background: var(--blue-soft); color: var(--blue); font-size: 10px; font-weight: 700; }
+    .compare-table { width: 100%; margin-top: 24px; border-collapse: collapse; font-size: 13px; }
+    .compare-table th, .compare-table td { padding: 13px 14px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare-table th { background: var(--ink); color: #fff; font-weight: 700; }
+    .compare-table td { background: var(--surface); }
+    .compare-table td:first-child { font-weight: 700; color: var(--ink); }
+    .compare-table tr:nth-child(even) td { background: var(--paper-2); }
+    .code-panel { position: relative; margin-top: 20px; padding: 18px 50px 18px 18px; border-left: 4px solid #74b9ff; background: #0f1724; color: #d4e3f7; font-family: Consolas, "Microsoft YaHei", monospace; font-size: 12px; line-height: 1.75; white-space: pre-wrap; border-radius: 0 6px 6px 0; }
+    .code-panel .copy-button { background: #1a2332; border-color: #334155; color: #94a3b8; }
+    .code-panel .copy-button:hover { border-color: #74b9ff; color: #fff; }
+    .scenario-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 0; }
+    .scenario-tab { min-height: 36px; padding: 8px 14px; border: 1px solid var(--line-dark); border-radius: 4px; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .scenario-tab:hover, .scenario-tab.is-active { border-color: #2563eb; background: #eff6ff; color: #1e40af; }
+    .scenario-panel { margin-top: 20px; padding: 22px; border: 1px solid var(--line); background: var(--surface); }
+    .scenario-panel.is-hidden { display: none; }
+    .highlight-box { margin-top: 22px; padding: 16px; border-left: 4px solid var(--gold); background: var(--gold-soft); color: #5a4620; font-size: 13px; }
+    .workflow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 24px; }
+    .workflow-step { padding: 16px; border: 1px solid var(--line); background: var(--surface); text-align: center; }
+    .workflow-step b { display: grid; place-items: center; width: 34px; height: 34px; margin: 0 auto 10px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 13px; }
+    .workflow-step strong { display: block; font-size: 14px; }
+    .workflow-step span { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+    @media (max-width: 900px) {
+      .workflow { grid-template-columns: 1fr 1fr; }
+      .compare-table { font-size: 12px; }
+      .compare-table th, .compare-table td { padding: 10px; }
+    }
+    @media (max-width: 600px) {
+      .workflow { grid-template-columns: 1fr; }
+      .tool-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>Codex 使用指南</strong><span>云端代码智能体实战</span></span></a>
+    <div class="header-context">公共资料 / <strong>代码与数据分析方向</strong></div>
+    <nav class="header-actions" aria-label="资源导航"><a class="header-link" href="ai-evolution.html">AI 产品演进</a><a class="header-link" href="ai-tool-upgrade.html">工具升级</a><a class="header-link" href="codex-guide.html">Codex 指南</a><a class="header-link" href="bluebook-course.html">蓝皮书</a><a class="header-link" href="advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">学习中心</a></nav>
+  </div></header>
+
+  <main id="main" class="route-main">
+    <section class="route-hero codex-hero"><div class="route-hero-inner">
+      <div>
+        <div class="eyebrow">Tool Focus / Codex</div>
+        <h1 class="page-title">把自然语言变成可运行的代码</h1>
+        <p class="page-lede">Codex 是 OpenAI 推出的云端代码智能体。它不仅能写代码，还能在隔离环境中运行、调试、读取文件并返回结果。本指南面向需要用脚本处理数据、自动化报表或快速验证想法的同事。</p>
+        <span class="codex-badge">云端执行 · 支持 Python/Shell/SQL · 任务级智能体</span>
+      </div>
+      <div class="route-summary"><div class="route-summary-row"><span>适用对象</span><strong>数据分析、开发、技术管理</strong></div><div class="route-summary-row"><span>预计用时</span><strong>20 分钟</strong></div><div class="route-summary-row"><span>完成标志</span><strong>完成 1 个可运行脚本任务</strong></div></div>
+    </div></section>
+
+    <div class="route-shell">
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#what">01 它是什么</a><a href="#difference">02 与 WorkBuddy 的区别</a><a href="#scenarios">03 典型场景</a><a href="#workflow">04 使用流程</a><a href="#prompts">05 提示词模板</a><a href="#checks">06 验收清单</a><div class="local-note">Codex 运行在云端沙箱，不要把含密码、Token、个人隐私或单位敏感授权信息的文件上传。</div></nav>
+      <div class="route-content">
+
+        <section id="what" class="content-section">
+          <div class="content-kicker">01 / 它是什么</div>
+          <h2>从“代码补全”到“端到端代码任务”</h2>
+          <p>Codex 经历了三代明显变化。今天的版本已经不是一个简单的代码编辑器插件，而是一个能独立完成小型工程任务的云端智能体。</p>
+          <div class="timeline">
+            <div class="timeline-item" data-year="2021">
+              <strong>代码补全模型</strong>
+              <p>根据上下文预测下一行代码，主要解决“怎么写”的问题，仍需人工运行和调试。</p>
+            </div>
+            <div class="timeline-item" data-year="2023">
+              <strong>对话式编程助手</strong>
+              <p>可以解释代码、生成片段、回答技术问题，但代码仍在本地编辑器里，执行环境由用户自己维护。</p>
+            </div>
+            <div class="timeline-item" data-year="2025">
+              <strong>云端代码智能体</strong>
+              <p>理解任务目标后，自动规划、写代码、在沙箱中运行、读取输出、修复错误，并交付可下载结果。</p>
+            </div>
+          </div>
+          <figure class="source-figure"><img src="../assets/advanced-automation/page-05.webp" alt="多专家协同工作流示意"><figcaption><strong>它在自动化链条中扮演“执行与验证”角色</strong>把模糊需求变成可执行脚本，并在沙箱里跑通，是 Codex 与纯聊天工具最大的区别。<a class="inline-source" href="ai-evolution.html?page=5">回看 AI 产品演进</a></figcaption></figure>
+        </section>
+
+        <section id="difference" class="content-section">
+          <div class="content-kicker">02 / 与 WorkBuddy 的区别</div>
+          <h2>不是替代，而是互补</h2>
+          <p>WorkBuddy 更擅长围绕本地工作空间和业务连接器完成办公任务；Codex 更擅长在云端沙箱里写代码、跑数据和验证算法。两者可以组合使用。</p>
+          <table class="compare-table">
+            <thead><tr><th>维度</th><th>WorkBuddy</th><th>Codex</th></tr></thead>
+            <tbody>
+              <tr><td>主要入口</td><td>桌面客户端，围绕本地工作空间</td><td>网页或 API，围绕云端沙箱</td></tr>
+              <tr><td>最擅长</td><td>文档处理、飞书协同、PPT/Excel 生成</td><td>代码编写、数据分析、脚本自动化</td></tr>
+              <tr><td>执行环境</td><td>本地电脑 + 已授权连接器</td><td>OpenAI 云端隔离沙箱</td></tr>
+              <tr><td>结果形态</td><td>.xlsx / .pptx / 飞书文档 / 邮件</td><td>.py / .csv / 图表 / 运行日志</td></tr>
+              <tr><td>典型用户</td><td>设计、经营、管理、综合岗位</td><td>数据、开发、技术管理岗位</td></tr>
+              <tr><td>组合用法</td><td colspan="2">用 WorkBuddy 整理业务需求与原始数据 → 让 Codex 生成并运行分析脚本 → 结果回 WorkBuddy 生成汇报材料</td></tr>
+            </tbody>
+          </table>
+          <p class="scroll-hint">提示：在窄屏设备上可以左右滑动查看完整表格。</p>
+          <div class="highlight-box"><strong>选型建议：</strong>如果任务主要是“读本地文件、生成 Office 材料、发送到飞书”，优先用 WorkBuddy；如果任务需要“写代码、做数据清洗、跑统计模型、验证算法”，优先用 Codex。</div>
+        </section>
+
+        <section id="scenarios" class="content-section">
+          <div class="content-kicker">03 / 典型场景</div>
+          <h2>这些工作适合先交给 Codex</h2>
+          <p>选择任务时，优先挑“输入清楚、输出可验证、错误可接受”的数据或代码任务。</p>
+          <div class="scenario-tabs" role="tablist" aria-label="场景切换">
+            <button class="scenario-tab is-active" type="button" data-task-tab="data" role="tab" aria-selected="true">数据清洗</button>
+            <button class="scenario-tab" type="button" data-task-tab="report" role="tab" aria-selected="false">报表生成</button>
+            <button class="scenario-tab" type="button" data-task-tab="api" role="tab" aria-selected="false">接口调试</button>
+            <button class="scenario-tab" type="button" data-task-tab="chart" role="tab" aria-selected="false">可视化</button>
+          </div>
+          <div class="scenario-panel" data-task-panel="data">
+            <h3>场景 01：把多份 Excel 合并成一张干净的表</h3>
+            <p style="color:var(--muted);font-size:13px;margin-top:8px;">常见于经营、财务、项目管理：不同部门发来的表格字段名不同、日期格式混乱、有空行空列。Codex 可以写一个 Python 脚本，统一格式后输出一张主表。</p>
+            <div class="metric-strip" style="margin-top:18px;"><div class="metric"><strong>3-5 个</strong><span>来源文件</span></div><div class="metric"><strong>1 个</strong><span>标准化输出</span></div><div class="metric"><strong>可重复</strong><span>脚本可复用</span></div></div>
+          </div>
+          <div class="scenario-panel is-hidden" data-task-panel="report" hidden>
+            <h3>场景 02：按规则自动生成周报数据摘要</h3>
+            <p style="color:var(--muted);font-size:13px;margin-top:8px;">读取本周任务工时 CSV，按项目汇总人天、计算完成率、识别逾期任务，输出一段 Markdown 摘要和一张汇总表。</p>
+            <div class="metric-strip" style="margin-top:18px;"><div class="metric"><strong>原始数据</strong><span>任务工时表</span></div><div class="metric"><strong>运算</strong><span>汇总 + 逾期识别</span></div><div class="metric"><strong>输出</strong><span>Markdown + CSV</span></div></div>
+          </div>
+          <div class="scenario-panel is-hidden" data-task-panel="api" hidden>
+            <h3>场景 03：快速验证一个 API 接口</h3>
+            <p style="color:var(--muted);font-size:13px;margin-top:8px;">给 Codex 一份接口文档和测试账号（注意脱敏），让它生成请求脚本、打印响应字段、检查状态码，并把结果整理成表格。</p>
+            <div class="metric-strip" style="margin-top:18px;"><div class="metric"><strong>输入</strong><span>接口文档</span></div><div class="metric"><strong>执行</strong><span>请求 + 解析</span></div><div class="metric"><strong>输出</strong><span>测试报告</span></div></div>
+          </div>
+          <div class="scenario-panel is-hidden" data-task-panel="chart" hidden>
+            <h3>场景 04：从原始数据生成可复用的分析图表</h3>
+            <p style="color:var(--muted);font-size:13px;margin-top:8px;">上传原始数据，要求 Codex 做描述性统计、画趋势图或分布图，并把图表和分析结论打包成 HTML/PDF 报告。</p>
+            <div class="metric-strip" style="margin-top:18px;"><div class="metric"><strong>数据</strong><span>原始表格</span></div><div class="metric"><strong>分析</strong><span>统计 + 可视化</span></div><div class="metric"><strong>交付</strong><span>图表 + 结论</span></div></div>
+          </div>
+        </section>
+
+        <section id="workflow" class="content-section">
+          <div class="content-kicker">04 / 使用流程</div>
+          <h2>四步完成第一个 Codex 任务</h2>
+          <p>不要把整个项目一次性丢给 Codex。先定义清楚输入、输出和验收标准，再逐步扩大任务范围。</p>
+          <div class="workflow">
+            <div class="workflow-step"><b>01</b><strong>准备输入</strong><span>把数据、字段说明、期望输出格式整理到一个文件夹或一段描述里。</span></div>
+            <div class="workflow-step"><b>02</b><strong>描述任务</strong><span>用“角色 + 目标 + 输入 + 输出 + 约束”五段式写提示词。</span></div>
+            <div class="workflow-step"><b>03</b><strong>运行与观察</strong><span>看 Codex 如何规划、写代码、运行。遇到报错先让它自己解释并修复。</span></div>
+            <div class="workflow-step"><b>04</b><strong>下载并验证</strong><span>把结果拿回本地，用原始数据抽样核对，确认无误后再用于正式场景。</span></div>
+          </div>
+          <div class="connector-box" style="margin-top:24px;"><h3>安全边界提示</h3><p>Codex 的云端沙箱会在任务结束后销毁，但上传的文件内容仍可能被记录用于模型改进（视 OpenAI 当前策略而定）。因此：不要上传合同金额、个人信息、密码、Token、内部代码仓库。</p></div>
+        </section>
+
+        <section id="prompts" class="content-section">
+          <div class="content-kicker">05 / 提示词模板</div>
+          <h2>三段式提示词，让代码更可控</h2>
+          <p>好的 Codex 提示词和给 WorkBuddy 的提示词结构类似：先交代背景，再明确任务，最后给出验收标准。下面给出三个可直接复用的模板。</p>
+
+          <h3 style="margin-top:28px;font-size:18px;">模板 A：数据清洗与合并</h3>
+          <div class="code-panel" id="prompt-a">你是一名数据工程师。当前任务是将多个格式相近的 Excel/CSV 文件合并成一张标准表。
+输入：
+- 文件位于 /data 目录，扩展名为 .xlsx 和 .csv；
+- 每个文件都有“项目名称、日期、金额、负责人”四列，但列名可能不完全一致；
+- 日期格式可能是 2024/1/15、2024-01-15 或 15/01/2024。
+
+目标：
+1. 读取所有文件；
+2. 把列名统一为：project_name, date, amount, owner；
+3. 把日期统一为 yyyy-mm-dd；
+4. 删除完全空行；
+5. 输出 merged_cleaned.csv 到 /output，并打印行数、金额总和、最早/最晚日期。
+
+约束：
+- 遇到无法解析的日期，保留原值并单独输出到 /output/parse_errors.csv；
+- 不要修改原始文件；
+- 执行前先向我确认你的字段映射方案。<button class="copy-button" type="button" data-copy-target="#prompt-a" data-copy-message="模板 A 已复制">复制</button></div>
+
+          <h3 style="margin-top:28px;font-size:18px;">模板 B：生成统计摘要</h3>
+          <div class="code-panel" id="prompt-b">你是一名数据分析助手。请分析 /data/task_hours.csv，生成本周工作摘要。
+字段说明：
+- project：项目名称；
+- name：成员姓名；
+- task：任务名称；
+- planned_hours：计划工时；
+- actual_hours：实际工时；
+- status：状态，值为 已完成 / 进行中 / 未开始；
+- due_date：截止日期（yyyy-mm-dd）。
+
+任务：
+1. 计算每个项目的总计划工时、总实际工时、完成率；
+2. 找出实际工时超出计划 20% 以上的任务；
+3. 找出已逾期且状态不是“已完成”的任务；
+4. 输出 summary.csv 和一段 Markdown 摘要，包含关键数字和行动建议。
+
+验收标准：
+- 所有数字必须能在原始表中逐条追溯；
+- 输出文件保存到 /output；
+- 摘要不超过 300 字。<button class="copy-button" type="button" data-copy-target="#prompt-b" data-copy-message="模板 B 已复制">复制</button></div>
+
+          <h3 style="margin-top:28px;font-size:18px;">模板 C：接口测试脚本</h3>
+          <div class="code-panel" id="prompt-c">你是一名后端测试工程师。请根据下面的接口描述生成 Python 测试脚本，并在沙箱中运行。
+接口：GET https://httpbin.org/get
+要求：
+1. 发送 3 次请求，每次带不同参数 name=alice/bob/carol；
+2. 检查响应状态码是否为 200；
+3. 提取响应中的 args.name 和 origin 字段；
+4. 把结果输出到 /output/api_test.csv，列：request_no, name, origin, status；
+5. 打印通过/失败总数。
+
+注意：
+- 不要上传任何真实内部接口地址或凭据；
+- 若网络不通，输出错误日志并说明原因。
+<button class="copy-button" type="button" data-copy-target="#prompt-c" data-copy-message="模板 C 已复制">复制</button></div>
+        </section>
+
+        <section id="checks" class="content-section">
+          <div class="content-kicker">06 / 验收清单</div>
+          <h2>代码任务完成不等于业务可用</h2>
+          <p>Codex 生成的代码可能看起来正确，但运行结果仍需人工核验。以下清单帮助你在正式使用前完成必要检查。</p>
+          <div class="practice-checks">
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-input"><span><strong>输入数据已脱敏</strong><small>不含真实姓名、金额、密码、Token</small></span></label>
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-output"><span><strong>输出文件可以下载并打开</strong><small>确认文件没有损坏、编码正常</small></span></label>
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-trace"><span><strong>关键数字能追溯到原始数据</strong><small>抽样核对 3-5 行汇总结果</small></span></label>
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-error"><span><strong>异常值已被显式处理</strong><small>空值、解析失败、超范围数据没有静默忽略</small></span></label>
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-repeat"><span><strong>脚本可重复运行</strong><small>再次执行得到一致结果</small></span></label>
+            <label class="practice-check"><input type="checkbox" data-progress-key="codex-limit"><span><strong>已知限制已记录</strong><small>明确标注哪些结论仍需人工复核</small></span></label>
+          </div>
+          <div class="review-grid" style="margin-top:24px;">
+            <div class="review-cell"><h3>可以继续扩大使用的信号</h3><ul><li>脚本运行无报错，输出格式稳定</li><li>抽样核对结果一致</li><li>异常数据有单独日志</li><li>任务描述可以复用到类似数据</li></ul></div>
+            <div class="review-cell"><h3>需要暂停并人工介入的信号</h3><ul><li>关键数字与原始表对不上</li><li>静默丢弃了空值或异常行</li><li>输出文件无法打开或乱码</li><li>上传了敏感或授权信息</li></ul></div>
+          </div>
+          <div class="callout" style="margin-top:24px;background:var(--ink);color:#fff;padding:18px;border-radius:6px;"><strong>下一步：</strong>找一份非敏感的、结构清晰的表格数据，用模板 A 或 B 完成第一个任务；也可以先看<a class="inline-source inline-source-auto" href="ai-tool-upgrade.html" style="color:#74b9ff;">AI 工具升级地图</a>，理解 Codex 在整个工具生态中的位置。</div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>Codex 使用指南 / WorkBuddy 学习中心</strong><p>云端代码智能体适合处理“输入清楚、输出可验证”的数据与脚本任务，但结果仍需人工复核。</p></div><div class="footer-links"><a href="../index.html">返回学习中心</a><a href="ai-tool-upgrade.html">AI 工具升级地图</a><a href="advanced-automation.html">自动化进阶</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
+</body>
+</html>
