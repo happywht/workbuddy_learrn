@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/codebuddy-logo.svg">
+  <title>WorkBuddy 实战速查卡 · 隧桥院</title>
+  <meta name="description" content="隧桥院全员 AI 办公实战速查卡：4 个场景可复制提示词（合同回款预警、项目周报汇总、人员工作量评估、周报转汇报 PPT）、通用任务公式、会前准备与安全提醒，复制即用。">
+  <meta name="theme-color" content="#c66e35">
+  <meta property="og:title" content="WorkBuddy 实战速查卡 · 隧桥院">
+  <meta property="og:description" content="4 个场景可复制提示词与通用任务公式：合同回款预警、项目周报汇总、人员工作量评估、周报转汇报 PPT。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="http://14.103.93.242/og-image-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="WorkBuddy 实战速查卡 · 隧桥院：4 场景可复制提示词">
+  <meta property="og:url" content="http://14.103.93.242/学员实战速查卡.html">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="WorkBuddy · 隧桥院">
+  <style>
+    :root {
+      --paper: #fffaf2;
+      --bg: #f7f1e8;
+      --ink: #142033;
+      --muted: #66717d;
+      --line: #ddcdb7;
+      --orange: #c66e35;
+      --blue: #244d73;
+      --green: #148461;
+      --red: #c54a3f;
+      --shadow: 0 18px 50px rgba(56, 42, 24, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      color-scheme: light;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(36,77,115,.055) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(36,77,115,.045) 1px, transparent 1px),
+        var(--bg);
+      background-size: 36px 36px, 36px 36px, auto;
+      font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans SC", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 30px 0 44px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fffaf2, #f4eadb);
+      box-shadow: var(--shadow);
+      padding: 30px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .kicker {
+      color: var(--orange);
+      font-size: 14px;
+      font-weight: 950;
+      margin-bottom: 8px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 820px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .print-btn,
+    .copy-btn {
+      border: 1px solid var(--blue);
+      border-radius: 10px;
+      background: var(--blue);
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 900;
+      padding: 10px 14px;
+    }
+
+    .print-btn:hover,
+    .copy-btn:hover {
+      filter: brightness(1.07);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card,
+    .case-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,250,242,.9);
+      box-shadow: 0 12px 32px rgba(56, 42, 24, .08);
+      padding: 20px;
+    }
+
+    .card h2,
+    .case-card h3 {
+      font-size: 24px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .card p,
+    .case-card p,
+    li {
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 1.25em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .step {
+      border-radius: 14px;
+      background: rgba(36,77,115,.07);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .step b {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--blue);
+      color: white;
+      font-family: Consolas, monospace;
+    }
+
+    .formula {
+      margin-top: 12px;
+      border: 2px solid rgba(198,110,53,.35);
+      border-radius: 18px;
+      background: #fff4e4;
+      padding: 18px;
+      color: #493221;
+      font-size: 21px;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .case-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .case-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: rgba(198,110,53,.12);
+      color: #8d431e;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .files {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 12px;
+    }
+
+    code,
+    pre {
+      font-family: Consolas, "Microsoft YaHei UI", monospace;
+    }
+
+    code {
+      color: var(--blue);
+      font-weight: 850;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    details {
+      border: 1px solid rgba(160,139,114,.42);
+      border-radius: 14px;
+      background: white;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 950;
+      color: var(--ink);
+    }
+
+    pre {
+      margin: 0;
+      padding: 0 14px 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #253043;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .notice {
+      border-left: 5px solid var(--green);
+      background: rgba(20,132,97,.08);
+      padding: 14px 16px;
+      border-radius: 14px;
+    }
+
+    .danger {
+      border-left-color: var(--red);
+      background: rgba(197,74,63,.08);
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    @media print {
+      body { background: white; }
+      .page { width: auto; padding: 0; }
+      .print-btn, .copy-btn { display: none; }
+      .hero, .card, .case-card { box-shadow: none; break-inside: avoid; }
+      details { break-inside: avoid; }
+      details pre { display: block; }
+    }
+
+    @media (max-width: 820px) {
+      .hero,
+      .grid,
+      .case-list,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">隧桥院全员分享会 · 现场跟做版</div>
+        <h1>WorkBuddy 实战速查卡</h1>
+        <p class="lead">不用先懂 AI。先选一个离你最近的任务，复制提示词，运行一次，再追问字段、公式、证据和复核点。</p>
+      </div>
+      <button class="print-btn" onclick="window.print()">打印 / 导出 PDF</button>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>会前准备</h2>
+        <div class="steps">
+          <div class="step"><b>1</b><p>访问 <code>https://www.codebuddy.cn/work/</code> 下载并安装。</p></div>
+          <div class="step"><b>2</b><p>登录 WorkBuddy，工作空间选择 <code>workbuddy-training-kit</code>。</p></div>
+          <div class="step"><b>3</b><p>飞书授权顺利就连接办公资料；不顺先用 <code>sample-data</code>。</p></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>通用任务公式</h2>
+        <p>把一句“帮我整理一下”，改成一张小型工作单。</p>
+        <div class="formula">动作 + 数据源 + 逻辑口径 + 交付物 + 复核要求</div>
+        <ul>
+          <li>先让它说明字段、公式、证据行。</li>
+          <li>再确认口径，最后生成文件。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="case-list">
+      <article class="case-card">
+        <div class="case-head">
+          <h3>A. 经营合同分析</h3>
+          <span class="tag">经营 / 综合优先</span>
+        </div>
+        <p>目标：从合同和回款数据生成异常账款预警清单。</p>
+        <div class="files">
+          <code>sample-data/经营合同与回款样例.xlsx</code>
+        </div>
+        <button class="copy-btn" data-copy="prompt-a">复制提示词</button>
+        <details>
+          <summary>查看提示词</summary>
+          <pre id="prompt-a">请分析 sample-data/经营合同与回款样例.xlsx。
+
+目标：从合同主表、回款流水和客户信用等级中生成异常账款预警清单。
+
+请先识别每个工作表的字段含义，说明统计口径；
+再按合同号汇总已回款金额和最近回款日；
+根据签约日期和账期天数计算应回款截止日；
+计算回款率、剩余应收、逾期天数；
+按红色高危、黄色中危、蓝色关注、正常生成预警等级；
+输出 Excel：预警清单、部门汇总、客户风险汇总、管理摘要。
+
+请先列出字段和计算口径，我确认后再生成最终文件。</pre>
+        </details>
+      </article>
+
+      <article class="case-card">
+        <div class="case-head">
+          <h3>B. 项目状态汇总</h3>
+          <span class="tag">项目 / 设计优先</span>
+        </div>
+        <p>目标：把飞书周报碎片整理成项目风险和下周动作。</p>
+        <div class="files">
+          <code>sample-data/飞书周报碎片样例.csv</code>
+          <code>sample-data/项目基础信息.csv</code>
+        </div>
+        <button class="copy-btn" data-copy="prompt-b">复制提示词</button>
+        <details>
+          <summary>查看提示词</summary>
+          <pre id="prompt-b">请读取 sample-data/飞书周报碎片样例.csv 和 sample-data/项目基础信息.csv。
+
+目标：把碎片化周报整理成统一的项目状态看板。
+
+请输出：
+1. 项目状态汇总表：项目名称、项目经理、计划进度、估算实际进度、本周进展、Top3风险、下周关键动作。
+2. 风险状态评级：高、中、低，并说明评级依据。
+3. 进度滞后项目清单：实际进度低于计划进度10个百分点以上。
+4. 需要院/部门协调的事项清单。
+
+请保留关键原文证据，方便人工复核。</pre>
+        </details>
+      </article>
+
+      <article class="case-card">
+        <div class="case-head">
+          <h3>C. 人员工作量评估</h3>
+          <span class="tag">负责人 / 骨干课后做</span>
+        </div>
+        <p>目标：交叉验证任务、填报和投入数据，看见团队压力。</p>
+        <div class="files">
+          <code>sample-data/任务工时样例.csv</code>
+          <code>sample-data/工时填报样例.csv</code>
+          <code>sample-data/人员投入样例.csv</code>
+        </div>
+        <button class="copy-btn" data-copy="prompt-c">复制提示词</button>
+        <details>
+          <summary>查看提示词</summary>
+          <pre id="prompt-c">请分析 sample-data/任务工时样例.csv、sample-data/工时填报样例.csv 和 sample-data/人员投入样例.csv。
+
+目标：生成团队成员工作量评估和产能热力图。
+
+请输出：
+1. 每人任务实际工时、填报工时、偏差率。
+2. 每人当前项目投入比例汇总。
+3. 过载人员、可承接人员、填报异常人员清单。
+4. 人员 × 日期热力图数据表。
+5. 人员 × 项目投入矩阵。
+6. 面向项目负责人的任务调整建议。
+
+请先列出你采用的统计口径和异常阈值。</pre>
+        </details>
+      </article>
+
+      <article class="case-card">
+        <div class="case-head">
+          <h3>D. 周报转汇报 PPT</h3>
+          <span class="tag">全员都可先试</span>
+        </div>
+        <p>目标：把 Markdown 周报变成 6 页以内的汇报大纲。</p>
+        <div class="files">
+          <code>sample-data/项目周报素材.md</code>
+          <code>参考：sample-data/周报转PPT样例.md</code>
+        </div>
+        <button class="copy-btn" data-copy="prompt-d">复制提示词</button>
+        <details>
+          <summary>查看提示词</summary>
+          <pre id="prompt-d">请读取 sample-data/项目周报素材.md（可参考 sample-data/周报转PPT样例.md 的汇报格式）。
+
+目标：生成一份6页以内的部门例会汇报PPT大纲。
+
+要求：
+1. 面向隧桥院全体或部门负责人，语言要清楚直接。
+2. 页面结构建议：封面、总体进展、重点项目、风险与协调事项、下周计划、需要决策的问题。
+3. 每页标题要是结论句，不要只写“项目情况”。
+4. 每页不超过3个要点。
+5. 先输出PPT大纲，我确认后再生成PPT文件。</pre>
+        </details>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card notice">
+        <h2>结果不理想时，先追问</h2>
+        <ul>
+          <li>请解释你采用的字段、公式、异常阈值和证据行。</li>
+          <li>请列出哪些地方需要人工复核，哪些结论不能直接用于正式报告。</li>
+          <li>请把结果压缩成 3 条最重要结论，适合部门例会 1 分钟讲完。</li>
+        </ul>
+      </article>
+
+      <article class="card notice danger">
+        <h2>安全提醒</h2>
+        <ul>
+          <li>培训现场优先使用脱敏样例数据。</li>
+          <li>真实项目数据上传 AI 前，先确认单位保密要求；涉密资料不要直接提交给云端 AI，先用样例或脱敏。</li>
+          <li>WorkBuddy 是副驾驶，最终判断和正式报送仍由人负责。</li>
+        </ul>
+      </article>
+    </section>
+
+    <p class="footer">本页为 UTF-8 HTML 版本，适合浏览器打开、投屏、打印和导出 PDF。</p>
+  </main>
+
+  <script>
+    // Copy text with a fallback for non-secure (HTTP) contexts where
+    // navigator.clipboard is undefined (e.g. public http:// deploy).
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.left = '0';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok ? Promise.resolve() : Promise.reject(new Error('copy failed'));
+    }
+
+    document.addEventListener("click", event => {
+      const button = event.target.closest("[data-copy]");
+      if (!button) return;
+      const target = document.getElementById(button.dataset.copy);
+      if (!target) return;
+      copyText(target.textContent.trim()).then(() => {
+        const old = button.textContent;
+        button.textContent = "已复制";
+        setTimeout(() => { button.textContent = old; }, 1100);
+      }).catch(() => {
+        button.textContent = "请手动复制";
+      });
+    });
+
+    // Print: force-expand all prompt details so the exported PDF keeps full prompts, not just the summary
+    window.addEventListener("beforeprint", () => {
+      document.querySelectorAll("details").forEach(d => {
+        d.dataset.wasOpen = d.open ? "1" : "0";
+        d.open = true;
+      });
+    });
+    window.addEventListener("afterprint", () => {
+      document.querySelectorAll("details").forEach(d => {
+        if (d.dataset.wasOpen !== undefined) d.open = d.dataset.wasOpen === "1";
+      });
+    });
+  </script>
+</body>
+</html>

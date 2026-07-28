@@ -406,6 +406,22 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .compare-table tbody, .compare-table thead, .compare-table tr, .compare-table th, .compare-table td { white-space: nowrap; }
 }
 
+.external-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 22px; }
+.external-link { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); text-decoration: none; transition: border-color .16s ease, background .16s ease; }
+.external-link:hover { border-color: var(--blue); background: var(--blue-soft); }
+.external-link-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 5px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 900; }
+.external-link span { display: block; font-size: 13px; font-weight: 700; color: var(--ink); }
+.external-link small { display: block; margin-top: 2px; font-size: 10px; color: var(--muted); }
+.link-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.link-row a { padding: 7px 12px; border: 1px solid var(--line-dark); border-radius: 4px; background: var(--surface); color: var(--blue); font-size: 12px; font-weight: 700; text-decoration: none; }
+.link-row a:hover { border-color: var(--blue); background: var(--blue-soft); }
+@media (max-width: 600px) {
+  .external-links { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 420px) {
+  .external-links { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 1000px) {
   .portal-top, .route-hero-inner { grid-template-columns: 1fr; }
   .direction-grid { grid-template-columns: 1fr 1fr; }
