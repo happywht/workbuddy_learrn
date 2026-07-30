@@ -1,0 +1,29 @@
+# WorkBuddy 学习中心 — .gitignore
+# 保护服务器凭据、部署脚本与本地运行时产物，绝不推入公开仓库（仓库为 PUBLIC）
+
+# ----- 凭据文件（含明文服务器地址/账号/密码，最高优先级）-----
+配置服务器.txt
+
+# ----- 部署脚本（连接生产服务器，含 SSH 凭据）-----
+deploy_sync.py
+deploy.py
+deploy_download_page.py
+deploy_recon.py
+iter_deploy.py
+
+# ----- 本地运行时产物（http-server / 工具日志）-----
+workbuddy-training-kit/.server.pid
+workbuddy-training-kit/.server.url
+.iter-state.json
+pywinauto-mcp.log
+
+# ----- 临时开发/审查脚本与工具目录 -----
+_read_xlsx.py
+_verify.py
+fix_mime.py
+fix_name.py
+gen_og_image.py
+gen_og_image_card.py
+_ppt_visual_review/
+.playwright-mcp/
+.spec-workflow/
