@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1e272e">
+  <meta name="description" content="OpenClaw 专题：开源、本地优先的 AI Agent 框架，绰号'龙虾'。认识它的定位、六项核心能力，以及与 WorkBuddy 的选型对比。">
+  <title>OpenClaw 专题 · WorkBuddy 学习中心</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+  <style>
+    /* OpenClaw 专题配色：以暖橙为识别色，与站点 coral 协调 */
+    .openclaw-hero { background: linear-gradient(135deg, #1e272e 0%, #2d3436 100%); color: #dfe6e9; }
+    .openclaw-hero .page-title { color: #fff; }
+    .openclaw-hero .page-lede { color: #b2bec3; }
+    .openclaw-hero .eyebrow { color: #ff8a65; }
+    .openclaw-hero .eyebrow::before { background: #ff8a65; }
+    .openclaw-hero .route-summary { border-top-color: #ff8a65; }
+    .openclaw-hero .route-summary-row { border-bottom-color: rgba(255,255,255,.12); }
+    .openclaw-hero .route-summary-row span { color: #b2bec3; }
+    .openclaw-hero .route-summary-row strong { color: #fff; }
+    .claw-mark { display:inline-block; margin-right:6px; font-size:1.05em; }
+
+    /* 三关键词定位卡 */
+    .pos-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+    .pos-card { padding:20px; border:1px solid var(--line); border-top:4px solid #ff8a65; background:var(--surface); }
+    .pos-card b { display:block; color:#ff8a65; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; }
+    .pos-card strong { display:block; margin-top:14px; font-size:17px; }
+    .pos-card span { display:block; margin-top:7px; color:var(--muted); font-size:12px; line-height:1.6; }
+
+    /* OpenClaw vs WorkBuddy 对比表 */
+    .vs-table { width:100%; margin-top:24px; border-collapse:collapse; border:1px solid var(--line); background:var(--surface); font-size:13px; }
+    .vs-table th, .vs-table td { padding:14px 16px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; line-height:1.55; }
+    .vs-table thead th { background:var(--ink); color:#fff; font-size:12px; font-weight:700; }
+    .vs-table thead th.oc { color:#ff8a65; }
+    .vs-table thead th.wb { color:#7fc4d6; }
+    .vs-table tbody th { background:var(--paper-2); font-weight:700; width:130px; }
+    .vs-table td.oc { color:var(--coral-dark); }
+    .vs-table td.wb { color:var(--blue); }
+    .vs-table tr:last-child td, .vs-table tr:last-child th { border-bottom:0; }
+    @media (max-width:680px){ .vs-table { display:block; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; } .vs-table tbody th { width:auto; } }
+
+    .verdict-card { margin-top:22px; padding:18px 20px; border-left:4px solid var(--coral); background:var(--ink); color:#fff; }
+    .verdict-card strong { display:block; font-size:15px; }
+    .verdict-card p { margin:8px 0 0; color:#c4cdca; font-size:12px; line-height:1.7; }
+    .verdict-card b { color:#ff8a65; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>OpenClaw 专题</strong><span>开源本地优先 AI Agent</span></span></a>
+    <div class="header-context">公共资料 / <strong>所有方向均可访问</strong></div>
+    <nav class="header-actions" aria-label="资源导航"><a class="header-link" href="ai-evolution.html">AI 产品演进</a><a class="header-link" href="ai-tool-upgrade.html">工具升级</a><a class="header-link" href="codex-guide.html">Codex 指南</a><a class="header-link is-active" href="openclaw-guide.html">OpenClaw</a><a class="header-link" href="bluebook-course.html">蓝皮书</a><a class="header-link" href="advanced-automation.html">自动化进阶</a><a class="header-link mobile-keep" href="../index.html">学习中心</a></nav>
+  </div></header>
+
+  <main id="main" class="route-main">
+    <section class="route-hero openclaw-hero"><div class="route-hero-inner">
+      <div>
+        <div class="eyebrow"><span class="claw-mark">&#129438;</span>OpenClaw · 开源本地优先的 AI Agent</div>
+        <h1 class="page-title">认识 OpenClaw：真正会"干活"的开源 AI 助手</h1>
+        <p class="page-lede">它不只是会聊天的 AI，而是能操作电脑、读写文件、浏览网页、执行脚本的"数字员工"。更重要的是——它跑在你自己的机器上，数据不经第三方云。这页帮你 5 分钟建立完整认知。</p>
+      </div>
+      <div class="route-summary">
+        <div class="route-summary-row"><span>类型</span><strong>开源 AI Agent 框架</strong></div>
+        <div class="route-summary-row"><span>技术栈</span><strong>TypeScript</strong></div>
+        <div class="route-summary-row"><span>首次发布</span><strong>2025 年 11 月</strong></div>
+        <div class="route-summary-row"><span>部署方式</span><strong>本地 / 自托管</strong></div>
+      </div>
+    </div></section>
+
+    <div class="route-shell">
+      <nav class="local-nav" aria-label="本页学习路径"><a href="#what">01 是什么</a><a href="#capabilities">02 核心能力</a><a href="#compare">03 对比 WorkBuddy</a><a href="#resources">04 延伸资源</a><div class="local-note">OpenClaw 更新很快，本页以 2026 年中公开资料整理，具体能力以官方最新版本为准。</div></nav>
+      <div class="route-content">
+
+        <section id="what" class="content-section">
+          <div class="content-kicker">01 / 是什么</div>
+          <h2>从"会聊天"到"会干活"</h2>
+          <p>OpenClaw 是一款<strong>开源、本地优先的个人 AI 助手与自主代理（AI Agent）框架</strong>，基于 TypeScript 开发，由开发者 Peter Steinberger 于 2025 年 11 月推出。它的项目图标是一只龙虾，因此在技术社区里被亲切地叫做"龙虾"或"小龙虾"（曾用名 Clawdbot、Moltbot）。</p>
+          <p>和 ChatGPT 这类"只能回答问题"的聊天工具不同，OpenClaw 的定位是<strong>"真正能干活"</strong>——它能理解你的意图，并自主去操作软件、读写文件、控制浏览器、执行脚本，把一件多步骤的工作真正做完。这也是它常被称作"数字员工"的原因。</p>
+          <div class="pos-grid">
+            <div class="pos-card"><b>关键词 01</b><strong>开源框架</strong><span>源代码完全开放，可自由审阅、修改和扩展，社区驱动迭代。</span></div>
+            <div class="pos-card"><b>关键词 02</b><strong>本地优先</strong><span>运行在你自己的设备或服务器上，数据不经第三方云，隐私可控。</span></div>
+            <div class="pos-card"><b>关键词 03</b><strong>自主执行</strong><span>不止于对话，能动手完成文件、网页、脚本层面的多步骤任务。</span></div>
+          </div>
+          <div class="callout" style="margin-top:24px;"><strong>为什么是"龙虾"？</strong> 这是 OpenClaw 项目图标带来的昵称。对我们这类对数据安全要求较高的单位而言，它最值得关注的不是图标，而是<strong>"本地优先、数据自有"</strong>的理念——这也是后续判断它适合什么场景的关键。</div>
+        </section>
+
+        <section id="capabilities" class="content-section">
+          <div class="content-kicker">02 / 核心能力</div>
+          <h2>六项关键能力一览</h2>
+          <p>OpenClaw 把大模型与本地操作系统、浏览器、通讯工具连接起来，构成一个能持续工作的 Agent。下面是它最常被提到的六项能力。</p>
+          <div class="concept-row">
+            <div class="concept-cell"><b>能力 01</b><strong>多渠道接入</strong><span>接入 WhatsApp、Telegram、Discord、Slack 等通讯平台，在熟悉的聊天界面里直接下指令。</span></div>
+            <div class="concept-cell"><b>能力 02</b><strong>浏览器控制</strong><span>自动打开网页、填写表单、抓取和整理信息，把重复的网上操作交给它。</span></div>
+            <div class="concept-cell"><b>能力 03</b><strong>文件与系统操作</strong><span>读写本地文件、执行脚本、调用接口，完成本机层面的自动化。</span></div>
+          </div>
+          <div class="concept-row" style="margin-top:0;">
+            <div class="concept-cell"><b>能力 04</b><strong>多模型协作</strong><span>可接入 Claude、GPT、Gemini，也能通过 Ollama 等接入本地模型，按任务选合适的模型。</span></div>
+            <div class="concept-cell"><b>能力 05</b><strong>持久记忆</strong><span>用 Markdown 文件留存上下文，没有隐藏状态，记忆透明、可审计、可管理。</span></div>
+            <div class="concept-cell"><b>能力 06</b><strong>技能扩展</strong><span>通过 Skills 插件增加能力，并支持多个 Agent 分工协作，处理更复杂的工作流。</span></div>
+          </div>
+          <div class="callout" style="margin-top:24px;border-left-color:var(--coral);background:var(--red-soft);color:#7a3528;"><strong>能力越强，边界越重要。</strong> OpenClaw 拥有系统级执行权限，意味着它能把事做完，也意味着必须在受控环境或隔离设备上运行，并在关键步骤保留人工确认。这和本学习中心一直强调的"安全红线"是一回事。</div>
+        </section>
+
+        <section id="compare" class="content-section">
+          <div class="content-kicker">03 / 对比 WorkBuddy</div>
+          <h2>OpenClaw 与 WorkBuddy，怎么选</h2>
+          <p>OpenClaw 和 WorkBuddy 都是"操作型"AI，但定位很不一样。理解这条线，能帮你判断该在什么场景用谁。</p>
+          <table class="vs-table" aria-label="OpenClaw 与 WorkBuddy 对比">
+            <thead><tr><th>对比维度</th><th class="oc">OpenClaw</th><th class="wb">WorkBuddy</th></tr></thead>
+            <tbody>
+              <tr><th>部署方式</th><td class="oc">本地 / 服务器自托管</td><td class="wb">云端，开箱即用</td></tr>
+              <tr><th>数据归属</th><td class="oc">完全本地，不经第三方云</td><td class="wb">云端处理（涉密资料需先脱敏）</td></tr>
+              <tr><th>上手门槛</th><td class="oc">较高，需部署与配置</td><td class="wb">零门槛，安装即用</td></tr>
+              <tr><th>擅长场景</th><td class="oc">系统级自动化、定时任务、多通道集成</td><td class="wb">办公文档、Excel、PPT、飞书协同</td></tr>
+              <tr><th>适合人群</th><td class="oc">技术团队、数据敏感场景</td><td class="wb">全员日常办公提效</td></tr>
+              <tr><th>模型选择</th><td class="oc">自选，支持本地模型</td><td class="wb">内置云端模型</td></tr>
+            </tbody>
+          </table>
+          <p class="scroll-hint">提示：在窄屏设备上可以左右滑动查看完整对比表。</p>
+          <div class="verdict-card">
+            <strong>一句话建议</strong>
+            <p><b>日常办公交付（报表、PPT、飞书协同）</b>——用 WorkBuddy，全员可用、即装即用。<br><b>数据必须本地化、要做系统级深度自动化</b>——值得让技术团队研究 OpenClaw。<br>两者并不冲突：WorkBuddy 解决"人人能用"的办公提效，OpenClaw 代表"数据自主、深度自动化"的前沿方向，可作为实验室的探索课题。</p>
+          </div>
+        </section>
+
+        <section id="resources" class="content-section">
+          <div class="content-kicker">04 / 延伸资源</div>
+          <h2>想深入了解</h2>
+          <p>本页内容综合自 OpenClaw 官方资料与公开技术社区，目的是帮同事快速建立认知。如果你想进一步研究，可以从下面这些权威入口开始。</p>
+          <div class="external-links">
+            <a class="external-link" href="https://openclaw.ai/" target="_blank" rel="noopener"><span class="external-link-icon">Oc</span><div><span>OpenClaw 官网</span><small>项目主页与概览</small></div></a>
+            <a class="external-link" href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener"><span class="external-link-icon">Gh</span><div><span>GitHub 仓库</span><small>源代码与 Issues</small></div></a>
+            <a class="external-link" href="https://docs.openclaw.ai/zh-CN/" target="_blank" rel="noopener"><span class="external-link-icon">Doc</span><div><span>官方文档（中文）</span><small>概念、记忆与部署指南</small></div></a>
+            <a class="external-link" href="https://zhuanlan.zhihu.com/p/2012694232666760139" target="_blank" rel="noopener"><span class="external-link-icon">&#129438;</span><div><span>深度解析（知乎）</span><small>"一只龙虾凭什么震撼全世界"</small></div></a>
+            <a class="external-link" href="https://www.tencentcloud.com/techpedia/140976" target="_blank" rel="noopener"><span class="external-link-icon">Tc</span><div><span>腾讯云技术百科</span><small>OpenClaw 词条</small></div></a>
+            <a class="external-link" href="ai-tool-upgrade.html"><span class="external-link-icon">Map</span><div><span>AI 工具升级地图</span><small>回到工具全景与选型矩阵</small></div></a>
+          </div>
+          <div class="connector-box" style="margin-top:24px;">
+            <h3>和本学习中心的关系</h3>
+            <p>本中心的实战课程与案例都基于 WorkBuddy 落地，因为它对非技术同事最友好。OpenClaw 作为"开源、本地优先"的代表，是理解 AI Agent 趋势的重要参照——尤其在数据安全与自主可控这条线上，它的理念值得持续关注。</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>OpenClaw 专题 / WorkBuddy 学习中心</strong><p>理解前沿，是为了更好地选择适合自己的工具。日常落地用 WorkBuddy，前沿探索看 OpenClaw。</p></div><div class="footer-links"><a href="../index.html">返回学习中心</a><a href="ai-tool-upgrade.html">AI 工具升级地图</a><a href="codex-guide.html">Codex 使用指南</a><a href="ai-evolution.html">AI 产品演进</a></div></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div><script src="../site.js" defer></script>
+</body>
+</html>
