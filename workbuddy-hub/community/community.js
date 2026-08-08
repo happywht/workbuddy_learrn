@@ -11,6 +11,18 @@
   let activeFilter = 'all';
   let query = '';
 
+  const normalizeDetail = item => item ? {
+    ...(item.metadata || {}), ...item,
+    version: item.current_version || item.version,
+    inputs: item.inputs || item.metadata?.inputs || [],
+    files: item.files || item.metadata?.files || [],
+    steps: item.steps || item.metadata?.steps || [],
+    checks: item.checks || item.metadata?.checks || [],
+    prompt: item.prompt || item.metadata?.prompt || '',
+    limitation: item.limitation || item.metadata?.limitation || '',
+    learningPath: item.learningPath || item.metadata?.learningPath || '#'
+  } : item;
+
   const caseCard = item => `<article class="community-case-card">
     <div class="case-card-top"><span>${escapeHtml(item.kind)}</span><strong>${escapeHtml(item.status)}</strong></div>
     <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>
@@ -53,10 +65,24 @@
   });
   document.querySelector('#case-search')?.addEventListener('input', event => { query = event.target.value; renderList(); });
 
-  fetch('../data/registry.json').then(response => response.ok ? response.json() : Promise.reject()).then(data => {
+  const apiEnabled = new URLSearchParams(location.search).get('api') === '1'
+    || window.localStorage?.getItem('workbuddyHubApi') === '1';
+  const apiBase = (window.WORKBUDDY_HUB_API_URL || location.origin).replace(/\/$/, '');
+  const requestedId = new URLSearchParams(location.search).get('id');
+  const fromApi = apiEnabled && apiBase
+    ? fetch(`${apiBase}/api/v1/artifacts?kind=case&limit=100`).then(response => response.ok ? response.json() : Promise.reject())
+      .then(data => ({ cases: data.items || [] }))
+    : Promise.reject();
+  const fromStatic = fetch('../data/registry.json').then(response => response.ok ? response.json() : Promise.reject());
+  (fromApi || fromStatic).catch(() => fromStatic).then(data => {
     cases = data.cases || [];
+    const detailRequest = apiEnabled && apiBase && requestedId
+      ? fetch(`${apiBase}/api/v1/artifacts/${encodeURIComponent(requestedId)}`).then(response => response.ok ? response.json() : Promise.reject()).catch(() => null)
+      : Promise.resolve(null);
+    return detailRequest.then(detail => ({ data, detail }));
+  }).then(({ data, detail }) => {
     if (listRoot) renderList();
-    if (detailRoot) renderDetail(cases.find(item => item.id === new URLSearchParams(location.search).get('id')));
+    if (detailRoot) renderDetail(normalizeDetail(detail || cases.find(item => item.id === requestedId)));
   }).catch(() => {
     if (listRoot) listRoot.innerHTML = '<div class="community-empty">案例数据加载失败，请通过本地服务打开页面。</div>';
     if (detailRoot) renderDetail(null);

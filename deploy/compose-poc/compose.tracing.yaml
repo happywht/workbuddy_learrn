@@ -1,0 +1,21 @@
+services:
+  hub-api:
+    environment:
+      HUB_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otel-collector:4318/v1/traces
+      HUB_OTEL_TRACE_SAMPLE_RATIO: "1"
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.130.1@sha256:9c247564e65ca19f97d891cca19a1a8d291ce631b890885b44e3503c5fdb3895
+    command:
+      - --config=/etc/otelcol-contrib/config.yaml
+    ports:
+      - "${OTEL_COLLECTOR_HEALTH_PORT:-13134}:13133"
+      - "${OTEL_COLLECTOR_METRICS_PORT:-18889}:8888"
+    volumes:
+      - ../monitoring/otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
+    read_only: true
+    security_opt:
+      - no-new-privileges:true

@@ -25,6 +25,15 @@ Artifact
 
 ## MCP Tools
 
+The Hub exposes the contract through `POST /api/v1/mcp` using JSON-RPC 2.0.
+`initialize`, `tools/list`, and `tools/call` are supported; a
+`notifications/initialized` notification returns `204`. `tools/list` is
+generated from the checked-in `contracts/mcp/hub-tools.json` schema, while
+`tools/call` reuses the same authorization and provider adapters as REST.
+Tool failures are returned as an MCP tool result with `isError: true` and a
+structured `{status_code, detail}` payload; they are not converted into a
+false success response. All MCP write tools require an `idempotency_key`.
+
 | Tool | Side effect | Purpose |
 | --- | --- | --- |
 | `registry.search` | No | Search accessible cases and Skills. |
@@ -59,9 +68,11 @@ Owner-only by default. The service binds the artifact to the authenticated actor
 
 Requires a department target resolved from the actor context. The service checks membership or delegated publication authority.
 
-### Institute
+### Organization
 
 Requires organization-wide publication authority defined by the registry policy. Department membership alone is not sufficient.
+
+The Hub implementation maps `report` to a hidden `reported` artifact state, allows the owner to restore a prior immutable version with `rollback`, and records ratings/reports as append-only audit events. Version updates reuse the same preview, confirmation, scope and scan rules as initial publication.
 
 ## Publication State Machine
 

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workbuddy-hub.local/contracts/events/collaboration-task.schema.json",
+  "title": "WorkBuddy Hub collaboration task event",
+  "type": "object",
+  "required": ["event_type", "task_id", "transport", "status_source", "status", "occurred_at"],
+  "properties": {
+    "event_type": {"type": "string", "minLength": 1, "maxLength": 80},
+    "task_id": {"type": "string", "pattern": "^collab_[a-f0-9]{32}$"},
+    "external_task_id": {"type": ["string", "null"]},
+    "dispatch_event_id": {"type": ["string", "null"]},
+    "transport": {"const": "matrix"},
+    "status_source": {"const": "hub"},
+    "room_id": {"type": ["string", "null"]},
+    "status": {
+      "enum": ["created", "queued", "running", "input_required", "completed", "failed", "cancel_requested", "cancelled", "timed_out"]
+    },
+    "cursor": {"type": ["string", "null"]},
+    "payload": {"type": "object"},
+    "occurred_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

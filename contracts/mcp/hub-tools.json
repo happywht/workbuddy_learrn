@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workbuddy-hub.local/contracts/mcp/hub-tools.json",
+  "title": "WorkBuddy Hub MCP tools",
+  "type": "object",
+  "required": ["registry.search", "registry.get", "registry.install_plan", "registry.publish_preview", "registry.publish", "registry.update", "registry.rate", "registry.report", "registry.rollback", "collab.teams", "collab.create_task", "collab.status", "collab.events", "collab.wait", "collab.artifacts", "collab.verify_artifact", "collab.send", "collab.cancel"],
+  "properties": {
+    "registry.search": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": {"type": "string", "maxLength": 120},
+        "kind": {"enum": ["case", "skill"]},
+        "tags": {"type": "array", "items": {"type": "string", "maxLength": 30}},
+        "limit": {"type": "integer", "minimum": 1, "maximum": 100}
+      },
+      "additionalProperties": false
+    },
+    "registry.get": {
+      "type": "object",
+      "required": ["artifact_id"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 3},
+        "version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "registry.install_plan": {
+      "type": "object",
+      "required": ["artifact_id", "slug"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^skillhub:.+"},
+        "slug": {"type": "string", "minLength": 1, "maxLength": 240},
+        "version": {"type": ["string", "null"]},
+        "target_agent": {"type": "string", "maxLength": 80}
+      },
+      "additionalProperties": false
+    },
+    "registry.publish_preview": {
+      "type": "object",
+      "required": ["kind", "requested_scope", "package", "idempotency_key"],
+      "properties": {
+        "kind": {"enum": ["case", "skill"]},
+        "requested_scope": {"enum": ["personal", "department", "organization"]},
+        "target_department_id": {"type": ["string", "null"]},
+        "package": {"type": "object"},
+        "source": {"type": "object"},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "registry.publish": {
+      "type": "object",
+      "required": ["preview_id", "confirmed_scope", "confirmation", "idempotency_key"],
+      "properties": {
+        "preview_id": {"type": "string", "minLength": 8},
+        "confirmed_scope": {"enum": ["personal", "department", "organization"]},
+        "target_department_id": {"type": ["string", "null"]},
+        "confirmation": {
+          "type": "object",
+          "required": ["confirmed", "confirmed_at"],
+          "properties": {
+            "confirmed": {"const": true},
+            "confirmed_at": {"type": "string", "format": "date-time"}
+          },
+          "additionalProperties": false
+        },
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "registry.update": {
+      "type": "object",
+      "required": ["artifact_id", "preview_id", "confirmed_scope", "confirmation", "idempotency_key"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 3},
+        "preview_id": {"type": "string", "minLength": 8},
+        "confirmed_scope": {"enum": ["personal", "department", "organization"]},
+        "target_department_id": {"type": ["string", "null"]},
+        "confirmation": {
+          "type": "object",
+          "required": ["confirmed", "confirmed_at"],
+          "properties": {
+            "confirmed": {"const": true},
+            "confirmed_at": {"type": "string", "format": "date-time"}
+          },
+          "additionalProperties": false
+        },
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "registry.rate": {
+      "type": "object",
+      "required": ["artifact_id", "score", "idempotency_key"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 3},
+        "score": {"type": "integer", "minimum": 1, "maximum": 5},
+        "comment": {"type": ["string", "null"], "maxLength": 2000},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "registry.report": {
+      "type": "object",
+      "required": ["artifact_id", "reason", "idempotency_key"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 3},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 2000},
+        "category": {"type": "string", "minLength": 1, "maxLength": 80},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "registry.rollback": {
+      "type": "object",
+      "required": ["artifact_id", "version", "confirmation", "idempotency_key"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 3},
+        "version": {"type": "string", "minLength": 1, "maxLength": 40},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240},
+        "confirmation": {
+          "type": "object",
+          "required": ["confirmed", "confirmed_at"],
+          "properties": {
+            "confirmed": {"const": true},
+            "confirmed_at": {"type": "string", "format": "date-time"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "collab.create_task": {
+      "type": "object",
+      "description": "Dispatch a Hub-owned task into an existing AgentTeams Matrix room. This does not call a Controller Task API.",
+      "required": ["team_id", "goal", "idempotency_key"],
+      "properties": {
+        "team_id": {"type": "string"},
+        "goal": {"type": "string", "maxLength": 4000},
+        "budget": {"type": "object"},
+        "output_contract": {"type": "object"},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "collab.teams": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "collab.status": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
+    },
+    "collab.events": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 3},
+        "cursor": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "collab.wait": {
+      "type": "object",
+      "description": "Wait up to 25 seconds for a Hub-correlated Matrix event or terminal task state.",
+      "required": ["task_id"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 3},
+        "cursor": {"type": "integer", "minimum": 0},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 25, "default": 20}
+      },
+      "additionalProperties": false
+    },
+    "collab.artifacts": {
+      "type": "object",
+      "description": "List task-scoped Matrix file metadata with explicit Matrix sync state. File content remains protected by Matrix and is not verified by this call.",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
+    },
+    "collab.verify_artifact": {
+      "type": "object",
+      "description": "Fetch an allowlisted cleartext task MXC object with the Hub Matrix identity and verify bounded content size, MIME and SHA-256 without returning the file body or marking it safe to execute.",
+      "required": ["task_id", "artifact_id", "idempotency_key"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 3},
+        "artifact_id": {"type": "string", "minLength": 2, "maxLength": 240},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    },
+    "collab.send": {
+      "type": "object",
+      "required": ["task_id", "content", "idempotency_key"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 3},
+        "content": {"type": "string", "minLength": 1, "maxLength": 12000},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240},
+        "attachments": {"type": "array", "items": {"type": "object"}}
+      },
+      "additionalProperties": false
+    },
+    "collab.cancel": {
+      "type": "object",
+      "description": "Send an auditable cooperative cancellation request. The task remains cancel_requested until acknowledged.",
+      "required": ["task_id", "idempotency_key"],
+      "properties": {
+        "task_id": {"type": "string", "minLength": 3},
+        "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
+      },
+      "additionalProperties": false
+    }
+  },
+  "x-side-effects": {
+    "registry.search": false,
+    "registry.get": false,
+    "registry.publish_preview": "temporary-draft",
+    "registry.publish": true,
+    "registry.update": true,
+    "registry.rate": true,
+    "registry.report": true,
+    "registry.rollback": true,
+    "registry.install_plan": false,
+    "collab.create_task": true,
+    "collab.teams": false,
+    "collab.status": false,
+    "collab.events": false,
+    "collab.wait": false,
+    "collab.artifacts": false,
+    "collab.verify_artifact": true,
+    "collab.send": true,
+    "collab.cancel": true
+  }
+}

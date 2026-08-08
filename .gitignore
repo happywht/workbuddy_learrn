@@ -27,3 +27,17 @@ gen_og_image_card.py
 _ppt_visual_review/
 .playwright-mcp/
 .spec-workflow/
+
+# ----- Hub API local runtime -----
+services/hub-api/.venv/
+services/hub-api/var/
+services/hub-api/.env
+services/hub-api/.env.local
+deploy/**/.env
+services/hub-api/.pytest_cache/
+services/hub-api/**/__pycache__/
+__pycache__/
+tools/__pycache__/
+
+# ----- Generated security reports -----
+artifacts/supply-chain/

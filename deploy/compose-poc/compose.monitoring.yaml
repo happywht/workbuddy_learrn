@@ -1,0 +1,20 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.5.0@sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=6h
+    ports:
+      - "${PROMETHEUS_PORT:-19090}:9090"
+    volumes:
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../monitoring/hub-alerts.yml:/etc/prometheus/hub-alerts.yml:ro
+    depends_on:
+      hub-api:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /prometheus:uid=65534,gid=65534,mode=0750
+    security_opt:
+      - no-new-privileges:true

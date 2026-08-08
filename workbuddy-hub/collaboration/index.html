@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="WorkBuddy Agent 协作室：创建可观察、可请求取消的多 Agent 任务。">
+  <title>Agent 协作室 · WorkBuddy</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>WorkBuddy Agent 协作室</strong><span>可观察、可介入、可请求取消</span></span></a>
+    <div class="header-context">协作室 / <strong>任务状态由 Hub 记录</strong></div>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link mobile-keep" href="../index.html">学习中心</a><a class="header-link" href="../community/index.html">案例社区</a><a class="header-link" href="../skills/index.html">Skill 中心</a></nav>
+  </div></header>
+  <main id="main" class="collab-main">
+    <section class="collab-head"><div><div class="eyebrow">Agent collaboration</div><h1>把任务交给一个可见的协作室</h1><p>任务创建后保留 Hub ID、Matrix 投递事件、房间、Hub 状态和事件游标。连接中断不会把等待状态伪装成完成。</p></div><div class="skill-connection"><span class="status-dot" id="collab-status-dot"></span><strong id="collab-status">等待连接</strong><small id="collab-status-note">需要 Hub API 和登录身份</small></div></section>
+    <section class="collab-workspace">
+      <form id="collab-form" class="collab-form"><div class="content-kicker">Create / 创建任务</div><h2>新建协作任务</h2><label>协作 Team<select id="collab-team" required><option value="">先连接并读取 Team</option></select></label><label>任务目标<textarea id="collab-goal" rows="7" maxlength="4000" required placeholder="说明目标、边界和期望产物"></textarea></label><button type="submit" class="button button-primary">创建任务</button></form>
+      <section class="collab-task" aria-live="polite"><div class="content-kicker">Status / 任务状态</div><div id="collab-task-body" class="collab-task-empty">尚未创建任务。</div></section>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>WorkBuddy Agent 协作室</strong><p>真实状态、完整审计、明确人工边界。</p></div><div class="footer-links"><a href="../index.html">学习中心</a><a href="../skills/index.html">Skill 中心</a></div></div></footer>
+  <script src="../site.js" defer></script><script src="../auth.js" defer></script><script src="collaboration.js" defer></script>
+</body>
+</html>

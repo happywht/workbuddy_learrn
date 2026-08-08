@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: hub-api
+  namespace: workbuddy-hub
+  labels:
+    app.kubernetes.io/name: workbuddy-hub-api
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: workbuddy-hub-api
+      app.kubernetes.io/component: api

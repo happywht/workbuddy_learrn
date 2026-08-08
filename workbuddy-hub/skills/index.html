@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e8">
+  <meta name="description" content="WorkBuddy Skill 中心：从受控 SkillHub 查找和生成安装计划。">
+  <title>Skill 中心 · WorkBuddy</title>
+  <link rel="icon" href="../assets/codebuddy-logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="../index.html"><img src="../assets/codebuddy-logo.svg" alt=""><span class="brand-copy"><strong>WorkBuddy Skill 中心</strong><span>查找固定版本的工作能力</span></span></a>
+    <div class="header-context">Skill 中心 / <strong>先看权限，再安装</strong></div>
+    <nav class="header-actions" aria-label="页面导航"><a class="header-link" href="../index.html">学习中心</a><a class="header-link" href="../community/index.html">案例社区</a><a class="header-link" href="../collaboration/index.html">Agent 协作</a><a class="header-link" href="../contribute/index.html">贡献方法</a></nav>
+  </div></header>
+
+  <main id="main" class="skill-main">
+    <section class="skill-hero"><div><div class="eyebrow">Skill registry</div><h1>把跑通的方法，安装成可复用能力</h1><p>搜索结果来自受控的 SkillHub 注册表。安装计划会固定版本、来源和校验和；包内脚本不会被页面自动执行。</p></div><div class="skill-connection"><span class="status-dot" id="skill-status-dot"></span><strong id="skill-status">等待连接 Hub API</strong><small id="skill-status-note">配置 API 地址后开始查询</small></div></section>
+    <section class="skill-browser" aria-labelledby="skill-browser-title">
+      <div class="skill-browser-head"><div><div class="content-kicker">Search / 查找 Skill</div><h2 id="skill-browser-title">你要把哪项工作变成固定步骤？</h2></div><form id="skill-search-form" class="skill-search"><label class="sr-only" for="skill-query">搜索 Skill</label><input id="skill-query" type="search" placeholder="搜索：表格检查、资料整理、汇报" autocomplete="off"><button type="submit" class="button button-secondary">搜索</button></form></div>
+      <div id="skill-results" class="skill-results" aria-live="polite"><div class="skill-empty">输入关键词后查询 SkillHub。</div></div>
+    </section>
+    <section class="skill-note"><strong>安装边界</strong><p>Skill 中心只生成安装计划，不代替你的 Agent 执行脚本。请确认权限、目标 Agent、版本和来源后再安装。</p></section>
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><strong>WorkBuddy Skill 中心</strong><p>固定版本，保留来源，人工确认执行。</p></div><div class="footer-links"><a href="../index.html">学习中心</a><a href="../community/index.html">案例社区</a></div></div></footer>
+  <script src="../site.js" defer></script><script src="../auth.js" defer></script><script src="skills.js" defer></script>
+</body>
+</html>
