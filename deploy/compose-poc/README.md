@@ -4,9 +4,38 @@
 
 ## 启动
 
+### 推荐：一键本地开发
+
+在仓库根目录执行：
+
 ```powershell
-Copy-Item .env.example .env
-# 修改 .env 中的 POSTGRES_PASSWORD
+.\deploy\compose-poc\start-local.ps1
+```
+
+脚本会检查 Docker Desktop，首次运行自动生成被 Git 忽略的本地 PostgreSQL 密码，使用独立 Compose 项目启动 Hub 和 PostgreSQL，等待健康检查并自动执行迁移。默认不需要 SkillHub、AgentTeams、OIDC 或任何外部凭据；这些服务未配置时，Hub 会返回明确的“适配器未配置”状态。
+
+停止本地服务（保留数据库 volume）：
+
+```powershell
+.\deploy\compose-poc\stop-local.ps1
+```
+
+默认端口是 Hub `8100`、PostgreSQL `55432`。端口被占用时可指定：
+
+```powershell
+.\deploy\compose-poc\start-local.ps1 -HubPort 18100 -PostgresPort 55433
+```
+
+启动后先运行：
+
+```powershell
+python deploy/compose-poc/smoke.py http://127.0.0.1:8100
+```
+
+### 手工 Compose
+
+```powershell
+# Optional: copy .env.example to .env to override local settings.
 docker compose up -d --build
 Invoke-WebRequest http://127.0.0.1:8100/health
 Invoke-WebRequest http://127.0.0.1:8100/metrics

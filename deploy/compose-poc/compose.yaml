@@ -6,7 +6,8 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-workbuddy_hub}
       POSTGRES_USER: ${POSTGRES_USER:-hub}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      # This fallback is only for the local PoC. start-local.ps1 replaces it with a random ignored value.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-workbuddy-local-only}
     ports:
       - "${POSTGRES_PORT:-55432}:5432"
     volumes:
@@ -31,7 +32,7 @@ services:
       HUB_OIDC_DEPARTMENT_GROUP_PREFIX: ${OIDC_DEPARTMENT_GROUP_PREFIX:-department:}
       HUB_OIDC_JWKS_CACHE_SECONDS: ${OIDC_JWKS_CACHE_SECONDS:-300}
       HUB_OIDC_CLOCK_SKEW_SECONDS: ${OIDC_CLOCK_SKEW_SECONDS:-30}
-      HUB_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hub}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-workbuddy_hub}
+      HUB_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hub}:${POSTGRES_PASSWORD:-workbuddy-local-only}@postgres:5432/${POSTGRES_DB:-workbuddy_hub}
       HUB_REGISTRY_PATH: /app/workbuddy-hub/data/registry.json
       HUB_SEED_DEMO_CASES: "true"
       HUB_OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-workbuddy-hub-api}

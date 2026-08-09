@@ -33,6 +33,7 @@ def test_container_uses_pinned_base_and_hashed_runtime_lock():
     assert scanner.PYTHON_IMAGE in dockerfile
     assert "pip install --require-hashes --only-binary=:all: -r requirements.lock" in dockerfile
     assert 'pip install --no-cache-dir ".[postgres]"' not in dockerfile
+    assert "uvicorn hub_api.main:app --host 0.0.0.0 --port 8000 --http h11" in dockerfile
     assert "USER 10001:10001" in dockerfile
 
 

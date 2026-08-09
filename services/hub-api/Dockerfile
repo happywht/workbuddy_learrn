@@ -21,4 +21,4 @@ COPY workbuddy-hub/data/registry.json ./workbuddy-hub/data/registry.json
 
 EXPOSE 8000
 USER 10001:10001
-CMD ["sh", "-c", "python -m hub_api.migrate && uvicorn hub_api.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "python -m hub_api.migrate && uvicorn hub_api.main:app --host 0.0.0.0 --port 8000 --http h11"]
