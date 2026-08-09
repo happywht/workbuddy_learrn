@@ -12,7 +12,9 @@
 .\deploy\compose-poc\start-local.ps1
 ```
 
-脚本会检查 Docker Desktop，首次运行自动生成被 Git 忽略的本地 PostgreSQL 密码，使用独立 Compose 项目启动门户、Hub 和 PostgreSQL，等待健康检查并自动执行迁移。默认不需要 SkillHub、AgentTeams、OIDC 或任何外部凭据；localhost 页面会自动连接 `http://127.0.0.1:8100` 并使用仅限本地的 `local-dev` 身份。这些上游服务未配置时，页面会显示明确的“适配器未配置”状态。
+脚本会检查 Docker Desktop，首次运行自动生成被 Git 忽略的本地 PostgreSQL 密码，使用独立 Compose 项目启动门户、Hub 和 PostgreSQL，等待健康检查并自动执行迁移。localhost 页面会自动连接 `http://127.0.0.1:8100` 并使用仅限本地的 `local-dev` 身份。
+
+如果本机已经运行 AgentTeams，脚本会自动生成 Hub 专用 Matrix 凭据并写入被 Git 忽略的 `.env`，然后把 Hub 接入 `agentteams-net`。SkillHub 地址默认是 `http://host.docker.internal:8080`。上游尚未启动时，Hub 仍可独立运行，页面会显示明确的“适配器未配置”状态，不会模拟成功。
 
 启动后直接打开：
 
@@ -38,6 +40,17 @@
 ```powershell
 python deploy/compose-poc/smoke.py http://127.0.0.1:8100
 ```
+
+通过结果中的 `"skillhub":"connected"` 和 `"agentteams":"connected"` 判断两个上游是否真正接通。只看到页面能打开不算接通。
+
+### 当前已验证的本地组合
+
+- SkillHub `v0.2.16`：Web `http://127.0.0.1:3001`，API `http://127.0.0.1:8080`；
+- AgentTeams `v1.2.2`：Element `http://127.0.0.1:18088`，Console `http://127.0.0.1:18001`；
+- Hub：Portal `http://127.0.0.1:4173`，API `http://127.0.0.1:8100`；
+- 本地身份使用 `local-dev`，当前阶段不需要 OIDC。
+
+模型 Key 只用于 AgentTeams/Skill 扫描器的本机 `.env`，禁止写入 Git。`docs/模型支持.txt` 也已由 `.gitignore` 排除。
 
 ### 手工 Compose
 

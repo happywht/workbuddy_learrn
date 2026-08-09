@@ -1,7 +1,9 @@
 # SkillHub 与 Agent 交流平台实施进度
 
-> 更新：2026-08-08
+> 更新：2026-08-09
 > 口径：只有当前工作区或真实运行证据可以证明的内容才标为完成。
+
+本轮本地端到端验收（2026-08-09）：Docker Desktop 已运行固定版本 SkillHub `v0.2.16`、AgentTeams `v1.2.2` 与 WorkBuddy Hub；Hub smoke 返回 `skillhub=connected`、`agentteams=connected`。真实 Matrix 协作任务由 `workbuddy-leader` 回复完整任务 ID 与 `LOCAL E2E OK`，后续消息与重复取消均通过。浏览器实测 `/skills/` 显示“SkillHub 已连接”，`/collaboration/` 显示“AgentTeams 已连接”和 `1 / 1 个 Team 可投递`，两页无控制台 warning/error。Hub 完整测试从仓库根目录执行为 **89 passed**。
 
 本轮回归（2026-08-08）：在 `services/hub-api` 执行 `uv run pytest`，结果为 **89 passed**（1 个 Starlette/httpx 弃用警告）；`contracts/mcp/hub-tools.json`、协作事件 Schema、`contracts/openapi/hub-api.openapi.json`、供应链工作流/例外/摘要均可解析，OpenAPI 已包含 MCP、版本、报告、评分、回滚路径且不公开 `/metrics`，`git diff --check` 通过；Git 文件列表 146 个文本文件和全工作区 209 个文本文件的 Secret 扫描均为 0 个发现。
 
@@ -58,6 +60,8 @@
 - 取消是 Matrix 中的协作停止请求；在 Agent 回传确认前，Hub 状态只能是 `cancel_requested`。
 - SkillHub ClawHub `latestVersion` 是嵌套对象，固定版本必须通过 `/api/v1/resolve` 获取；下载 302 可能返回相对地址。
 
-## 当前阻塞外部输入
+## 当前阻塞与个人开发边界
 
-继续完成 Phase 0/1/4 需要组织侧提供或确认：隔离 PoC 主机、OIDC IdP/组 Claim、SkillHub 和 AgentTeams 固定版本部署目标，以及用于测试的脱敏 Skill/协作任务。缺少这些条件不影响继续完善 Hub 本地实现，但不能形成真实上游端到端验收证据。
+**本地开发当前无阻塞，也不需要用户再提供 OIDC、Kubernetes、生产告警负责人或正式 SLO/RPO/RTO。** 模型配置已填写，固定版本上游、Hub 连接、Skill 安装计划和真实 Agent 回复均已验证。
+
+迁移到 16H16G Linux 服务器时，才需要确定服务器公网 IP/域名、防火墙和 HTTPS。个人试用可以继续使用本地身份；OIDC、多人权限、告警值班和正式灾备指标在出现真实多人/生产需求后再启用。具体步骤见 [16H16G 单机服务器迁移指南](16H16G单机服务器迁移指南.md)。

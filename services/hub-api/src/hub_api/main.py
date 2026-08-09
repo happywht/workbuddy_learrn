@@ -15,7 +15,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from .config import get_settings
-from .db import SessionLocal, get_db, init_db
+from .db import get_db
 from .identity import ActorIdentity, IdentityError, OIDCVerifier
 from .models import (
     Artifact,
@@ -96,12 +96,15 @@ tracer_provider = (
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    init_db()
-    if settings.seed_demo_cases:
+    from . import db as db_module
+
+    runtime_settings = get_settings()
+    db_module.init_db()
+    if runtime_settings.seed_demo_cases:
         from .seed import import_cases
 
-        with SessionLocal() as db:
-            import_cases(db, settings.registry_path)
+        with db_module.SessionLocal() as db:
+            import_cases(db, runtime_settings.registry_path)
     yield
     skillhub_client.close()
     agentteams_controller_client.close()
@@ -589,7 +592,11 @@ def _refresh_collaboration_events(
         return CollaborationSyncResponse(status="degraded", error=exc.code)
     provider_events = provider_payload.get("events", []) if isinstance(provider_payload, dict) else []
     for item in provider_events if isinstance(provider_events, list) else []:
-        if not isinstance(item, dict) or not event_belongs_to_task(item, task.id):
+        if not isinstance(item, dict):
+            continue
+        if str(item.get("sender") or "") == agentteams_matrix_client.user_id:
+            continue
+        if not event_belongs_to_task(item, task.id):
             continue
         event_cursor = item.get("event_id")
         if event_cursor and db.scalar(
@@ -814,6 +821,9 @@ def create_collaboration_task(
         HUB_EVENT_KEY: message[HUB_EVENT_KEY],
     }
     db.add(task)
+    # Persist the parent before audit events so PostgreSQL can enforce the FK
+    # even though these models do not define an ORM relationship.
+    db.flush()
     db.add(
         CollaborationEvent(
             task_id=task.id,

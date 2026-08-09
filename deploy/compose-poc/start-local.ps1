@@ -15,6 +15,7 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $composeFile = Join-Path $PSScriptRoot "compose.yaml"
 $envFile = Join-Path $PSScriptRoot ".env"
+$agentTeamsNetwork = "agentteams-net"
 
 if (-not (Test-Path -LiteralPath $envFile)) {
     $passwordBytes = New-Object byte[] 24
@@ -36,6 +37,23 @@ if (-not (Test-Path -LiteralPath $envFile)) {
 $envContent = Get-Content -Raw -LiteralPath $envFile
 if ($envContent -notmatch "(?m)^POSTGRES_PASSWORD=\S+") {
     throw "POSTGRES_PASSWORD is missing in $envFile"
+}
+
+& docker network inspect $agentTeamsNetwork *> $null
+if ($LASTEXITCODE -ne 0) {
+    & docker network create $agentTeamsNetwork *> $null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to create the local AgentTeams integration network."
+    }
+}
+
+$agentTeamsController = & docker ps --format "{{.Names}}" | Where-Object { $_ -eq "agentteams-controller" }
+$agentTeamsConfigured = $envContent -match "(?m)^AGENTTEAMS_MATRIX_TOKEN=\S+"
+if ($agentTeamsController -and -not $agentTeamsConfigured) {
+    & (Join-Path $PSScriptRoot "configure-agentteams-local.ps1") -EnvFile $envFile
+    if ($LASTEXITCODE -ne 0) {
+        throw "AgentTeams is running, but automatic Hub connector configuration failed."
+    }
 }
 
 $composeArgs = @(

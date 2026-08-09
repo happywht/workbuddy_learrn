@@ -361,7 +361,9 @@ def event_belongs_to_task(event: dict[str, Any], task_id: str) -> bool:
     envelope = content.get(HUB_EVENT_KEY)
     if isinstance(envelope, dict) and envelope.get("task_id") == task_id:
         return True
-    return f"[WBH:{task_id}]" in str(content.get("body") or "")
+    # Models may reformat the WBH prefix or brackets, but the full opaque task
+    # id remains unique enough to correlate safely within the dedicated room.
+    return task_id in str(content.get("body") or "")
 
 
 def event_status(event: dict[str, Any]) -> str | None:

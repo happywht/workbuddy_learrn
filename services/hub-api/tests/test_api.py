@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 
 
@@ -22,6 +22,13 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     config.get_settings.cache_clear()
     db.settings = config.get_settings()
     db.engine = create_engine(database_url, connect_args={"check_same_thread": False})
+
+    @event.listens_for(db.engine, "connect")
+    def enable_sqlite_foreign_keys(dbapi_connection, _connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
     db.SessionLocal = sessionmaker(bind=db.engine, autoflush=False, expire_on_commit=False)
     from hub_api.main import app
 
@@ -808,6 +815,7 @@ def test_collaboration_task_lifecycle_is_idempotent_and_audited(client: TestClie
 
     class StubMatrix:
         configured = True
+        user_id = "@hub:local"
 
         def __init__(self):
             self.sync_calls = 0
@@ -828,6 +836,28 @@ def test_collaboration_task_lifecycle_is_idempotent_and_audited(client: TestClie
                 return {"events": [], "next_cursor": "sync-0"}
             return {
                 "events": [
+                    {
+                        "event_id": "$hub-message",
+                        "type": "m.room.message",
+                        "sender": "@hub:local",
+                        "content": {
+                            "msgtype": "m.text",
+                            "body": f"[WBH:{task_id}] outgoing message",
+                            "com.workbuddy.hub": {
+                                "kind": "task.message",
+                                "task_id": task_id,
+                            },
+                        },
+                    },
+                    {
+                        "event_id": "$leader-reply",
+                        "type": "m.room.message",
+                        "sender": "@leader:local",
+                        "content": {
+                            "msgtype": "m.text",
+                            "body": f"WBH:{task_id}] completed",
+                        },
+                    },
                     {
                         "event_id": "$status-1",
                         "type": "m.room.message",
@@ -900,6 +930,9 @@ def test_collaboration_task_lifecycle_is_idempotent_and_audited(client: TestClie
     events = client.get(f"/api/v1/collaboration/tasks/{task_id}/events", headers={"X-Actor-Id": "local-user"})
     assert events.status_code == 200
     assert {item["event_type"] for item in events.json()["events"]} >= {"task_dispatched", "status_changed"}
+    matrix_messages = [item for item in events.json()["events"] if item["event_type"] == "matrix_message"]
+    assert len(matrix_messages) == 1
+    assert matrix_messages[0]["payload"]["sender"] == "@leader:local"
     assert events.json()["artifacts"][0]["mxc_uri"] == "mxc://local/report-1"
     assert events.json()["artifacts"][0]["content_verified"] is False
     repeated_events = client.get(f"/api/v1/collaboration/tasks/{task_id}/events", headers={"X-Actor-Id": "local-user"})

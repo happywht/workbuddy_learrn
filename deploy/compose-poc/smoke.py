@@ -55,6 +55,25 @@ def expect_error(url: str, status: int, detail: str, headers: dict[str, str] | N
         raise RuntimeError(f"{url}: expected HTTP {status}")
 
 
+def check_optional_provider(
+    url: str,
+    *,
+    unavailable_detail: str,
+    headers: dict[str, str],
+    result_key: str,
+) -> str:
+    try:
+        payload = get_json(url, headers=headers)
+    except HTTPError as exc:
+        error = json.loads(exc.read().decode("utf-8"))
+        if exc.code == 503 and error.get("detail") == unavailable_detail:
+            return "not_configured"
+        raise RuntimeError(f"{url}: unexpected provider response {exc.code} {error}") from exc
+    if not isinstance(payload.get(result_key), list):
+        raise RuntimeError(f"{url}: provider response missing {result_key}")
+    return "connected"
+
+
 def main() -> int:
     base_url = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8100"
     health = get_json(f"{base_url}/health")
@@ -88,16 +107,18 @@ def main() -> int:
     required_tools = {"registry.search", "registry.get", "collab.wait", "collab.send"}
     if not required_tools <= tool_names:
         raise RuntimeError(f"MCP tool contract incomplete: missing {sorted(required_tools - tool_names)}")
-    expect_error(
-        f"{base_url}/api/v1/artifacts?kind=skill&q=excel",
-        503,
-        "skillhub_adapter_not_configured",
+    provider_headers = {"X-Actor-Id": "smoke-user"}
+    skillhub = check_optional_provider(
+        f"{base_url}/api/v1/skills?q=skill&limit=5",
+        unavailable_detail="skillhub_adapter_not_configured",
+        headers=provider_headers,
+        result_key="items",
     )
-    expect_error(
+    agentteams = check_optional_provider(
         f"{base_url}/api/v1/collaboration/teams",
-        503,
-        "agentteams_controller_not_configured",
-        headers={"X-Actor-Id": "smoke-user"},
+        unavailable_detail="agentteams_controller_not_configured",
+        headers=provider_headers,
+        result_key="teams",
     )
     print(
         json.dumps(
@@ -108,6 +129,8 @@ def main() -> int:
                 "compatibility_title": detail["title"],
                 "mcp_tools": len(tool_names),
                 "observability": "request-id+metrics",
+                "skillhub": skillhub,
+                "agentteams": agentteams,
             },
             ensure_ascii=False,
         )

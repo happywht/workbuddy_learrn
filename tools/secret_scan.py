@@ -39,6 +39,7 @@ VARIABLE_VALUES = {
     "PASSWORD",
 }
 ENV_LOOKUP_RE = re.compile(r"(?i)^(?:os\.environ(?:\.get)?|os\.getenv|process\.env|env)\(")
+POWERSHELL_VARIABLE_RE = re.compile(r"^\$[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$")
 
 
 def _files_from_git(root: Path) -> list[Path]:
@@ -97,6 +98,8 @@ def scan(root: Path, *, walk: bool = False) -> tuple[list[dict[str, object]], in
                 raw_value = match.group("value").strip()
                 value = raw_value.strip("\"'()[]{}.,")
                 if value in VARIABLE_VALUES:
+                    continue
+                if POWERSHELL_VARIABLE_RE.fullmatch(value):
                     continue
                 if ENV_LOOKUP_RE.match(value):
                     continue

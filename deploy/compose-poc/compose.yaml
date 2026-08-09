@@ -64,6 +64,9 @@ services:
       HUB_AGENTTEAMS_MATRIX_MEDIA_MAX_BYTES: ${AGENTTEAMS_MATRIX_MEDIA_MAX_BYTES:-26214400}
     ports:
       - "${HUB_PORT:-8100}:8000"
+    networks:
+      - default
+      - agentteams
     depends_on:
       postgres:
         condition: service_healthy
@@ -75,3 +78,8 @@ services:
 
 volumes:
   hub-postgres:
+
+networks:
+  agentteams:
+    external: true
+    name: agentteams-net
