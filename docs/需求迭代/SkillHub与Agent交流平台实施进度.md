@@ -3,7 +3,7 @@
 > 更新：2026-08-09
 > 口径：只有当前工作区或真实运行证据可以证明的内容才标为完成。
 
-本轮本地端到端验收（2026-08-09）：Docker Desktop 已运行固定版本 SkillHub `v0.2.16`、AgentTeams `v1.2.2` 与 WorkBuddy Hub；Hub smoke 返回 `skillhub=connected`、`agentteams=connected`。真实 Matrix 协作任务由 `workbuddy-leader` 回复完整任务 ID 与 `LOCAL E2E OK`，后续消息与重复取消均通过。浏览器实测 `/skills/` 显示“SkillHub 已连接”，`/collaboration/` 显示“AgentTeams 已连接”和 `1 / 1 个 Team 可投递`，两页无控制台 warning/error。Hub 完整测试从仓库根目录执行为 **89 passed**。
+本轮本地端到端验收（2026-08-09）：Docker Desktop 已运行固定版本 SkillHub `v0.2.16`、AgentTeams `v1.2.2` 与 WorkBuddy Hub；Hub smoke 返回 `skillhub=connected`、`agentteams=connected`。真实 Matrix 协作任务由 `workbuddy-leader` 回复完整任务 ID 与 `LOCAL E2E OK`，后续消息与重复取消均通过。新增轻量 Agent 任务广场：Agent 注册、公开任务检索、揭榜、提交、验收和事件链已通过真实容器 smoke，MCP `task.search` 同步通过。浏览器实测 `/skills/` 显示“SkillHub 已连接”，`/collaboration/` 显示“AgentTeams 已连接”和 `1 / 1 个 Team 可投递`，两页无控制台 warning/error。Hub 完整测试从仓库根目录执行为 **90 passed**。
 
 本轮回归（2026-08-08）：在 `services/hub-api` 执行 `uv run pytest`，结果为 **89 passed**（1 个 Starlette/httpx 弃用警告）；`contracts/mcp/hub-tools.json`、协作事件 Schema、`contracts/openapi/hub-api.openapi.json`、供应链工作流/例外/摘要均可解析，OpenAPI 已包含 MCP、版本、报告、评分、回滚路径且不公开 `/metrics`，`git diff --check` 通过；Git 文件列表 146 个文本文件和全工作区 209 个文本文件的 Secret 扫描均为 0 个发现。
 
@@ -20,6 +20,7 @@
 | SEC-01 | 部分 | 发布预览已有 Secret/路径/Hash/过期/审计、预览键和发布结果幂等；新增版本化 Manifest 扫描，阻断路径/符号链接/MIME 逃逸并标记许可证、依赖、脚本、二进制、宏；协作产物已有大小、MIME、SHA-256、Zip 路径/符号链接/展开量校验 | 接入真实上传包，完成实际 Zip 内容/MIME、许可证、依赖和脚本扫描与规则签名 |
 | SKILL-01 | 部分 | 已按固定 commit 核验 ClawHub 搜索/详情/resolve/download；安装计划固定真实 resolved version；当 SkillHub detail 不提供合法 SHA-256 时，Hub 通过受限流式下载计算并返回服务端包哈希（`workbuddy-smoke@0.1.0` 真实返回 `bf153cad...cbb85`，与实际下载字节一致）；Trusted Grant 仍为扩展点 | SkillHub 服务端 Grant 扩展、真实组织权限/撤权和生产包扫描烟测 |
 | TEAM-01 | 部分 | 已拆分真实 Controller Team client 与 Matrix client；投递、消息、取消、等待/游标、`input_required` 人工介入、明文产物、allowlist 鉴权下载、完整性校验、写操作幂等和审计已实现；新增 [AgentTeams-PoC 前置审计](AgentTeams-PoC前置审计.md) 固化官方 Helm/installer 的部署前检查；API 回归覆盖重复消息/取消不会重复发送 Matrix 事件 | 真实 Team Admin token、房间权限和文件烟测；E2EE 另行评审与实现 |
+| AGENT-01 | MVP 完成 | 轻量 Agent 注册、能力/Skill 声明、公开任务发布/检索、单 Agent 揭榜、提交、发布者验收、任务事件和 Agent Token 已实现；REST、MCP、SQLite/PostgreSQL 迁移和真实容器 smoke 通过 | 接入真实外部 Agent、任务执行 Worker 和 SkillHub Agent 发布 Grant |
 | WEB-01 | PoC 完成 | `/skills/` 可查询并显示真实不可用状态、生成安装计划；新增 `auth.js`，远程页面只使用运行时 Bearer 注入，本地才允许 actor header | 组织 SSO 注入和真实 SkillHub 浏览器验收 |
 | WEB-02 | PoC 完成 | `/collaboration/` 只展示当前 Matrix 身份可投递 Team，创建/刷新/请求取消走真实 Hub 契约；`input_required` 时显示最新事件提示并可发送人工回复；消息和取消请求携带幂等键；浏览器 stub 回归确认面板、回复提交和无控制台错误；新增统一登录态边界，远程无 token 时不发送伪造 actor | 组织 SSO 注入和至少两个异构 Agent 任务演练 |
 | OPS-01 | 部分 | `.env` 排除、旧部署脚本已改为读取 `WORKBUDDY_DEPLOY_*` 环境变量/SSH Agent，不再硬编码服务器凭据；新增 `tools/secret_scan.py`、`ADR-011` 和 GitHub Actions secret-scan 工作流；Git 文件列表扫描 138 个文本文件、全工作区 walk 扫描 196 个文本文件均为 0 个发现，临时 API_KEY fixture 可被阻断且不泄露值 | 轮换历史凭据、接入组织 Secret Manager，完成历史文件/服务器副本审计 |
@@ -31,9 +32,9 @@
 
 ## 当前验证
 
-- Hub API：`pytest` 89 项通过；覆盖迁移、OIDC RSA/JWKS 验签与权限隔离、预览/发布幂等、Manifest 安全扫描、版本/报告/评分/回滚治理、固定上游 SkillHub 路由、AgentTeams Controller/Matrix 路由、状态边界、有界等待、`input_required` 消息介入、消息/取消幂等、MCP JSON-RPC 工具调用、恢复清单篡改检测、产物下载和完整性校验，以及请求 ID、低基数指标、日志脱敏、监控配置、受控 Trace、Kubernetes 发布约束、容量探针、生产锁漂移、供应链策略和容器浅路径配置。
+- Hub API：`pytest` 90 项通过；覆盖迁移、OIDC RSA/JWKS 验签与权限隔离、预览/发布幂等、Manifest 安全扫描、版本/报告/评分/回滚治理、固定上游 SkillHub 路由、AgentTeams Controller/Matrix 路由、轻量 Agent 注册和任务广场闭环、状态边界、有界等待、`input_required` 消息介入、消息/取消幂等、MCP JSON-RPC 工具调用、恢复清单篡改检测、产物下载和完整性校验，以及请求 ID、低基数指标、日志脱敏、监控配置、受控 Trace、Kubernetes 发布约束、容量探针、生产锁漂移、供应链策略和容器浅路径配置。
 - Compose：PostgreSQL 和 Hub API 健康；旧 volume 收编为 `0001_initial`；7 张业务/版本表存在。重启后的本地 `127.0.0.1:8100` 部署 smoke 通过：`/health` 为 200，4 个案例可读，`case-capacity` 标题为 `项目资料交付检查`，未配置 SkillHub/AgentTeams 时 Skill 查询和协作 Team 查询分别返回预期 503。
-- MCP 运行态：重启后的本地 `127.0.0.1:8100` 通过 `deploy/compose-poc/smoke.py` 验证 `POST /api/v1/mcp` 的 `tools/list`，当前返回 18 个契约工具；未认证协作调用返回结构化 `401 identity_required`，缺少 MCP 写幂等键返回工具级错误。
+- MCP 运行态：重启后的本地 `127.0.0.1:8100` 通过 `deploy/compose-poc/smoke.py` 验证 `POST /api/v1/mcp` 的 `tools/list`，当前返回 27 个契约工具；新增 `agent.*` 和 `task.*` 工具使用 `X-Agent-Token`，未认证调用返回结构化错误。
 - 容器化回归：使用独立 Compose 项目 `workbuddy-hub-poc-ci`、端口 `18100/55433` 和临时 volume 完成镜像构建、Alembic 启动迁移、PostgreSQL/Hub healthcheck 与同一 smoke；验证完成后已删除临时容器、网络和 volume，未触碰现有 8100 服务或业务库。
 - 可观测性容器回归：使用独立 Compose 项目 `workbuddy-hub-observability-ci`、端口 `18120/55450` 构建新镜像；运行态 smoke 验证 4 案例、兼容标题、18 个 MCP 工具、`X-Request-Id` 透传、三类 Prometheus 指标及模板路由标签，随后删除临时容器、网络、volume 和镜像；原 8100 服务仍返回 health ok 和 4 个案例。
 - 监控栈回归：`prom/prometheus:v3.5.0` 固定多架构 digest，`promtool` 验证 1 个配置和 3 条规则；隔离 Compose 项目 `workbuddy-hub-monitoring-ci` 在 `18130/55460/19091` 启动 PostgreSQL、Hub 和 Prometheus，运行态确认 Hub target 为 `up` 且 3 条告警规则加载。首次运行暴露只读容器 tmpfs 权限问题，修正为 `nobody` 的 `uid/gid 65534` 后通过；临时容器、网络、volume 和 Hub 镜像已清理。

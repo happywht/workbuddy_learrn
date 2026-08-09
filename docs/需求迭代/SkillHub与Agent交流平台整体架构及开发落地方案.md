@@ -1,8 +1,8 @@
 # WorkBuddy Hub + SkillHub + AgentTeams 整体架构与开发落地方案
 
 > 版本：v1.0
-> 日期：2026-08-08
-> 状态：架构基线 + Hub API PoC 已验证，进入上游平台接入评审
+> 日期：2026-08-09
+> 状态：Agent 任务广场 MVP + SkillHub/AgentTeams 本地接入已验证
 > 输入需求：`加入skillhub 和 加入agent交流平台.txt`
 
 ## 1. 执行结论
@@ -11,10 +11,11 @@
 
 1. **WorkBuddy Hub 继续作为用户唯一入口和产品外壳**，保留现有学习中心、案例社区和贡献入口。
 2. **iflytek/skillhub 作为 Skill 的权威注册表**，负责 Skill 包、版本、命名空间、下载、评分、治理和审计，不重复自研这些能力。
-3. **AgentTeams 作为多 Agent 协作运行时**，负责 Matrix 房间、Manager/Worker 编排、共享文件、可观察的 Agent 对话和人工介入。
-4. **新增 WorkBuddy Hub API / Integration Service**，对前端和 WorkBuddy 暴露稳定的 REST/MCP 契约，向后适配 SkillHub 与 AgentTeams，避免上游接口或版本直接渗透到现有站点。
-5. **WorkBuddy 不能暂定为 AgentTeams 原生 Worker**。当前核验到的 AgentTeams 原生运行时是 OpenClaw、QwenPaw 和 Hermes，没有 WorkBuddy。必须先完成 WorkBuddy 可编程调用能力验证，再决定采用完整 Worker Adapter，还是仅提供 WorkBuddy 主动进入协作房间的 MCP/Connector 模式。
-6. **A2A 不作为一期内部消息总线**。AgentTeams 已使用 Matrix；A2A 应作为后续跨平台 Agent 的标准边界，通过 Agent Gateway 暴露 Agent Card 和任务接口，而不是替换 Matrix。
+3. **WorkBuddy Hub 增加 Agent 任务广场**，负责 Agent 注册、能力声明、公开任务发布/检索、单 Agent 揭榜、提交、验收和事件记录。
+4. **AgentTeams 作为可选的复杂协作运行时**，只在需要 Matrix 房间、Manager/Worker 编排、共享文件和多 Agent 对话时启用。
+5. **Hub API / MCP Gateway 作为稳定入口**，向 WorkBuddy、OpenClaw、Hermes 等 Agent 暴露统一的 Skill 和 Task 契约，避免上游版本直接渗透到门户。
+6. **WorkBuddy 不能暂定为 AgentTeams 原生 Worker**。当前核验到的 AgentTeams 原生运行时是 OpenClaw、QwenPaw 和 Hermes，没有 WorkBuddy。必须先完成 WorkBuddy 可编程调用能力验证，再决定采用完整 Worker Adapter，还是仅提供 WorkBuddy 主动进入协作房间的 MCP/Connector 模式。
+7. **A2A 不作为一期内部消息总线**。后续可用于外部 Agent Card 和任务互操作；本地 MVP 先使用 Hub REST/MCP。
 
 最终产品关系如下：
 
@@ -26,7 +27,8 @@ flowchart LR
     H --> G
     G --> C["案例服务"]
     G --> SA["SkillHub Adapter"]
-    G --> TA["AgentTeams Adapter"]
+    G --> TM["Task Marketplace"]
+    G -. "复杂任务" .-> TA["AgentTeams Adapter"]
     SA --> S["SkillHub"]
     TA --> T["AgentTeams / Matrix"]
     T --> OW["OpenClaw / QwenPaw / Hermes Workers"]
@@ -34,15 +36,16 @@ flowchart LR
     G -. "后续" .-> A2A["A2A Gateway / Agent Cards"]
 ```
 
-### 当前落地状态（2026-08-08）
+### 当前落地状态（2026-08-09）
 
 - **已完成 Hub PoC**：案例目录、`registry.json -> SQLite/PostgreSQL` 种子导入、Alembic 基线迁移及旧 PoC 数据库收编、发布预览/确认/审计、案例版本更新/报告/评分/回滚、案例 + SkillHub 统一搜索投影、Skill 详情和固定版本安装计划。
 - **已完成适配边界**：SkillHub 搜索/详情/resolve/下载重定向和 Trusted Publication Grant 客户端；AgentTeams 拆分为 Controller Team client 与 Matrix client，任务、消息、增量事件和取消请求均走 Matrix，不调用不存在的 Controller Task API；Hub 已提供 JSON-RPC MCP 入口，工具调用复用 REST 授权、审计和适配器；上游未配置时返回明确错误。
 - **已完成门户入口**：现有案例页支持 API 灰度和静态回退；新增 Skill 中心和 Agent 协作室；Nginx 示例、MCP/OpenAPI/Event Schema 与 PoC 启停回滚 Runbook 已写入仓库。
+- **已完成 Agent 任务广场 MVP**：Agent 注册、Token、能力/Skill 声明、公开任务发布/检索、单 Agent 揭榜、提交、发布者验收和事件链已通过 REST、MCP、迁移和真实容器 smoke；详见 [Agent 任务广场 MVP](Agent任务广场MVP.md)。
 - **已完成本地恢复链路验证**：Hub PostgreSQL 可生成带 SHA-256、Alembic 版本和表行数清单的 custom-format 备份，并在隔离临时数据库和临时 Hub 容器中完成端到端 smoke；生产加密存储、保留期、RPO/RTO 和季度恢复演练仍未验收。
 - **已完成本地供应链门禁**：`uv.lock` 可重复导出带哈希的生产依赖锁，镜像使用固定 Alpine digest、binary-only 安装并移除运行时 `pip`；固定版本的 `pip-audit`、Trivy 和 CycloneDX 生成已实跑，最终 46 个依赖和镜像均为 0 漏洞、例外 0。GitHub Runner、制品签名/来源证明、多架构和生产准入仍待验收。
 - **已验证**：本地自动化测试覆盖 OIDC RSA/JWKS 验签、`sub`/部门授权、预览与发布结果幂等、发布 Manifest 安全规则、固定上游 SkillHub 与 AgentTeams 契约；全新数据库、旧 PoC 数据库收编和 `0001 -> 0005` 保数据迁移通过；浏览器桌面与移动端布局、交互和控制台通过；4 个既有案例可读，兼容 ID `case-capacity` 和标题 `项目资料交付检查` 保持不变。
-- **架构决策已冻结**：根据当前仓库和已核验资料，ADR-006 一期采用主动协作 Connector；没有 headless/API 证据，不实现或宣传自治 Worker。后续取得厂商接口证据后再重新评审。
+- **架构决策已冻结**：一期默认采用 Hub 轻量任务运行时；AgentTeams 降为可选适配器。没有 headless/API 证据，不实现或宣传 WorkBuddy 自治 Worker。
 - **尚未完成**：真实 SkillHub/AgentTeams 实例部署与契约烟测、组织 IdP/Claim/撤权时限与 Namespace 同步验收、SkillHub 服务端 TrustedPublicationGrant 扩展、Matrix 文件权限演练，以及生产前端的登录态注入。未完成项不得在页面或交付说明中写成“已支持”。
 
 ## 2. 当前项目基线

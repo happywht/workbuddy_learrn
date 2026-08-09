@@ -151,3 +151,56 @@ class CollaborationArtifactVerification(Base):
     actor_id: Mapped[str] = mapped_column(String(160), nullable=False)
     idempotency_key: Mapped[str] = mapped_column(String(240), nullable=False)
     verified_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+
+
+class Agent(Base):
+    __tablename__ = "agent"
+    __table_args__ = (UniqueConstraint("name", name="uq_agent_name"),)
+
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)
+    name: Mapped[str] = mapped_column(String(160), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    endpoint: Mapped[str | None] = mapped_column(String(1000))
+    capabilities: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    skills: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    owner_id: Mapped[str | None] = mapped_column(String(160))
+    token_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="active")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False)
+
+
+class MarketplaceTask(Base):
+    __tablename__ = "marketplace_task"
+    __table_args__ = (
+        Index("ix_marketplace_task_status_visibility", "status", "visibility"),
+        Index("ix_marketplace_task_owner", "owner_agent_id"),
+    )
+
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)
+    owner_agent_id: Mapped[str] = mapped_column(ForeignKey("agent.id"), nullable=False)
+    title: Mapped[str] = mapped_column(String(240), nullable=False)
+    goal: Mapped[str] = mapped_column(Text, nullable=False)
+    input_schema: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
+    output_schema: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
+    required_capabilities: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    required_skills: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
+    visibility: Mapped[str] = mapped_column(String(20), nullable=False, default="public")
+    status: Mapped[str] = mapped_column(String(30), nullable=False, default="published")
+    claimed_by_agent_id: Mapped[str | None] = mapped_column(ForeignKey("agent.id"))
+    submission: Mapped[dict[str, Any] | None] = mapped_column(JSON)
+    evaluation: Mapped[dict[str, Any] | None] = mapped_column(JSON)
+    deadline: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow, nullable=False)
+
+
+class MarketplaceTaskEvent(Base):
+    __tablename__ = "marketplace_task_event"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    task_id: Mapped[str] = mapped_column(ForeignKey("marketplace_task.id", ondelete="CASCADE"), nullable=False)
+    event_type: Mapped[str] = mapped_column(String(40), nullable=False)
+    agent_id: Mapped[str | None] = mapped_column(String(100))
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)

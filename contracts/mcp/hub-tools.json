@@ -3,7 +3,7 @@
   "$id": "https://workbuddy-hub.local/contracts/mcp/hub-tools.json",
   "title": "WorkBuddy Hub MCP tools",
   "type": "object",
-  "required": ["registry.search", "registry.get", "registry.install_plan", "registry.publish_preview", "registry.publish", "registry.update", "registry.rate", "registry.report", "registry.rollback", "collab.teams", "collab.create_task", "collab.status", "collab.events", "collab.wait", "collab.artifacts", "collab.verify_artifact", "collab.send", "collab.cancel"],
+  "required": ["registry.search", "registry.get", "registry.install_plan", "registry.publish_preview", "registry.publish", "registry.update", "registry.rate", "registry.report", "registry.rollback", "collab.teams", "collab.create_task", "collab.status", "collab.events", "collab.wait", "collab.artifacts", "collab.verify_artifact", "collab.send", "collab.cancel", "agent.register", "agent.list", "task.publish", "task.search", "task.get", "task.claim", "task.submit", "task.evaluate", "task.events"],
   "properties": {
     "registry.search": {
       "type": "object",
@@ -212,6 +212,75 @@
         "idempotency_key": {"type": "string", "minLength": 8, "maxLength": 240}
       },
       "additionalProperties": false
+    },
+    "agent.register": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 2, "maxLength": 160},
+        "description": {"type": "string", "maxLength": 2000},
+        "endpoint": {"type": ["string", "null"], "maxLength": 1000},
+        "capabilities": {"type": "array", "items": {"type": "string"}, "maxItems": 100},
+        "skills": {"type": "array", "items": {"type": "string"}, "maxItems": 100}
+      },
+      "additionalProperties": false
+    },
+    "agent.list": {"type": "object", "additionalProperties": false},
+    "task.publish": {
+      "type": "object",
+      "required": ["title", "goal"],
+      "properties": {
+        "title": {"type": "string", "minLength": 2, "maxLength": 240},
+        "goal": {"type": "string", "maxLength": 8000},
+        "input_schema": {"type": "object"},
+        "output_schema": {"type": "object"},
+        "required_capabilities": {"type": "array", "items": {"type": "string"}, "maxItems": 100},
+        "required_skills": {"type": "array", "items": {"type": "string"}, "maxItems": 100},
+        "deadline": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "task.search": {
+      "type": "object",
+      "properties": {
+        "q": {"type": ["string", "null"], "maxLength": 120},
+        "status": {"type": "string"},
+        "capability": {"type": ["string", "null"]},
+        "skill": {"type": ["string", "null"]},
+        "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+        "offset": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "task.get": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
+    },
+    "task.claim": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
+    },
+    "task.submit": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}, "summary": {"type": "string", "maxLength": 8000}, "result": {"type": "object"}},
+      "additionalProperties": false
+    },
+    "task.evaluate": {
+      "type": "object",
+      "required": ["task_id", "accepted"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}, "accepted": {"type": "boolean"}, "comment": {"type": "string", "maxLength": 4000}},
+      "additionalProperties": false
+    },
+    "task.events": {
+      "type": "object",
+      "required": ["task_id"],
+      "properties": {"task_id": {"type": "string", "minLength": 3}},
+      "additionalProperties": false
     }
   },
   "x-side-effects": {
@@ -232,6 +301,15 @@
     "collab.artifacts": false,
     "collab.verify_artifact": true,
     "collab.send": true,
-    "collab.cancel": true
+    "collab.cancel": true,
+    "agent.register": true,
+    "agent.list": false,
+    "task.publish": true,
+    "task.search": false,
+    "task.get": false,
+    "task.claim": true,
+    "task.submit": true,
+    "task.evaluate": true,
+    "task.events": false
   }
 }

@@ -234,3 +234,75 @@ class CollaborationArtifactsResponse(BaseModel):
 class CollaborationWaitResponse(CollaborationEventsResponse):
     task: CollaborationTaskResponse
     timed_out: bool
+
+
+class AgentRegisterRequest(BaseModel):
+    name: str = Field(min_length=2, max_length=160, pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+    description: str = Field(default="", max_length=2000)
+    endpoint: str | None = Field(default=None, max_length=1000)
+    capabilities: list[str] = Field(default_factory=list, max_length=100)
+    skills: list[str] = Field(default_factory=list, max_length=100)
+
+
+class AgentResponse(BaseModel):
+    id: str
+    name: str
+    description: str
+    endpoint: str | None = None
+    capabilities: list[str] = Field(default_factory=list)
+    skills: list[str] = Field(default_factory=list)
+    status: str
+    created_at: datetime
+
+
+class AgentRegisterResponse(AgentResponse):
+    token: str
+
+
+class AgentListResponse(BaseModel):
+    items: list[AgentResponse]
+    total: int
+
+
+class MarketplaceTaskCreateRequest(BaseModel):
+    title: str = Field(min_length=2, max_length=240)
+    goal: str = Field(min_length=1, max_length=8000)
+    input_schema: dict[str, Any] = Field(default_factory=dict)
+    output_schema: dict[str, Any] = Field(default_factory=dict)
+    required_capabilities: list[str] = Field(default_factory=list, max_length=100)
+    required_skills: list[str] = Field(default_factory=list, max_length=100)
+    deadline: datetime | None = None
+
+
+class MarketplaceTaskResponse(BaseModel):
+    id: str
+    owner_agent_id: str
+    title: str
+    goal: str
+    input_schema: dict[str, Any]
+    output_schema: dict[str, Any]
+    required_capabilities: list[str]
+    required_skills: list[str]
+    visibility: str
+    status: str
+    claimed_by_agent_id: str | None = None
+    submission: dict[str, Any] | None = None
+    evaluation: dict[str, Any] | None = None
+    deadline: datetime | None = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class MarketplaceTaskListResponse(BaseModel):
+    items: list[MarketplaceTaskResponse]
+    total: int
+
+
+class MarketplaceSubmissionRequest(BaseModel):
+    result: dict[str, Any] = Field(default_factory=dict)
+    summary: str = Field(default="", max_length=8000)
+
+
+class MarketplaceEvaluationRequest(BaseModel):
+    accepted: bool
+    comment: str = Field(default="", max_length=4000)

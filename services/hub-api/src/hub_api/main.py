@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
+import hashlib
 import json
 import re
+import secrets
 from typing import Any, Annotated
 from uuid import NAMESPACE_URL, uuid4, uuid5
 
@@ -24,6 +26,9 @@ from .models import (
     CollaborationArtifactVerification,
     CollaborationEvent,
     CollaborationTask,
+    Agent,
+    MarketplaceTask,
+    MarketplaceTaskEvent,
     PublicationPreview,
 )
 from .media_validation import MediaValidationError, verify_media
@@ -74,6 +79,15 @@ from .schemas import (
     SkillRecordResponse,
     SkillInstallPlanRequest,
     SkillInstallPlanResponse,
+    AgentRegisterRequest,
+    AgentRegisterResponse,
+    AgentListResponse,
+    AgentResponse,
+    MarketplaceTaskCreateRequest,
+    MarketplaceTaskResponse,
+    MarketplaceTaskListResponse,
+    MarketplaceSubmissionRequest,
+    MarketplaceEvaluationRequest,
     VersionUpdateRequest,
     RatingRequest,
     ReportRequest,
@@ -472,6 +486,242 @@ def create_skill_install_plan(
         install_directory=f"~/.workbuddy/skills/{slug}",
         uninstall=f"Remove the installed skill at ~/.workbuddy/skills/{slug}",
     )
+
+
+def _agent_token_hash(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def _agent_response(agent: Agent) -> AgentResponse:
+    return AgentResponse(
+        id=agent.id,
+        name=agent.name,
+        description=agent.description,
+        endpoint=agent.endpoint,
+        capabilities=list(agent.capabilities or []),
+        skills=list(agent.skills or []),
+        status=agent.status,
+        created_at=agent.created_at,
+    )
+
+
+def get_agent_identity(
+    db: Annotated[Session, Depends(get_db)],
+    token: Annotated[str | None, Header(alias="X-Agent-Token")] = None,
+) -> Agent:
+    if not token or len(token) > 512:
+        raise HTTPException(status_code=401, detail="agent_token_required")
+    agent = db.scalar(select(Agent).where(Agent.token_hash == _agent_token_hash(token)))
+    if agent is None or agent.status != "active":
+        raise HTTPException(status_code=401, detail="agent_token_invalid")
+    return agent
+
+
+def get_optional_agent_identity(
+    db: Annotated[Session, Depends(get_db)],
+    token: Annotated[str | None, Header(alias="X-Agent-Token")] = None,
+) -> Agent | None:
+    if not token:
+        return None
+    return get_agent_identity(db, token)
+
+
+def _marketplace_task_response(task: MarketplaceTask) -> MarketplaceTaskResponse:
+    return MarketplaceTaskResponse(
+        id=task.id,
+        owner_agent_id=task.owner_agent_id,
+        title=task.title,
+        goal=task.goal,
+        input_schema=task.input_schema or {},
+        output_schema=task.output_schema or {},
+        required_capabilities=list(task.required_capabilities or []),
+        required_skills=list(task.required_skills or []),
+        visibility=task.visibility,
+        status=task.status,
+        claimed_by_agent_id=task.claimed_by_agent_id,
+        submission=task.submission,
+        evaluation=task.evaluation,
+        deadline=task.deadline,
+        created_at=task.created_at,
+        updated_at=task.updated_at,
+    )
+
+
+def _marketplace_event(db: Session, task: MarketplaceTask, event_type: str, agent_id: str | None, payload: dict[str, Any] | None = None) -> None:
+    db.add(MarketplaceTaskEvent(task_id=task.id, event_type=event_type, agent_id=agent_id, payload=payload or {}))
+
+
+@app.post("/api/v1/agents/register", response_model=AgentRegisterResponse, tags=["agents"])
+def register_agent(
+    request: AgentRegisterRequest,
+    db: Annotated[Session, Depends(get_db)],
+    identity: Annotated[ActorIdentity | None, Depends(get_optional_identity)],
+) -> AgentRegisterResponse:
+    if db.scalar(select(Agent).where(Agent.name == request.name)) is not None:
+        raise HTTPException(status_code=409, detail="agent_name_taken")
+    token = f"agt_{secrets.token_urlsafe(24)}"
+    agent = Agent(
+        id=f"agent-{uuid4().hex[:16]}",
+        name=request.name,
+        description=request.description,
+        endpoint=request.endpoint,
+        capabilities=request.capabilities,
+        skills=request.skills,
+        owner_id=identity.subject if identity else None,
+        token_hash=_agent_token_hash(token),
+        status="active",
+    )
+    db.add(agent)
+    db.flush()
+    db.add(AuditEvent(event_type="agent_registered", actor_id=identity.subject if identity else agent.id, object_id=agent.id, payload={"name": agent.name}))
+    db.commit()
+    db.refresh(agent)
+    return AgentRegisterResponse(**_agent_response(agent).model_dump(), token=token)
+
+
+@app.get("/api/v1/agents", response_model=AgentListResponse, tags=["agents"])
+def list_agents(db: Annotated[Session, Depends(get_db)]) -> AgentListResponse:
+    agents = db.scalars(select(Agent).where(Agent.status == "active").order_by(Agent.created_at.desc())).all()
+    return AgentListResponse(items=[_agent_response(agent) for agent in agents], total=len(agents))
+
+
+@app.get("/api/v1/agents/{agent_id}", response_model=AgentResponse, tags=["agents"])
+def get_agent(agent_id: str, db: Annotated[Session, Depends(get_db)]) -> AgentResponse:
+    agent = db.get(Agent, agent_id)
+    if agent is None or agent.status != "active":
+        raise HTTPException(status_code=404, detail="agent_not_found")
+    return _agent_response(agent)
+
+
+@app.post("/api/v1/tasks", response_model=MarketplaceTaskResponse, tags=["task-marketplace"])
+def publish_marketplace_task(
+    request: MarketplaceTaskCreateRequest,
+    db: Annotated[Session, Depends(get_db)],
+    agent: Annotated[Agent, Depends(get_agent_identity)],
+) -> MarketplaceTaskResponse:
+    task = MarketplaceTask(
+        id=f"task-{uuid4().hex[:20]}",
+        owner_agent_id=agent.id,
+        title=request.title,
+        goal=request.goal,
+        input_schema=request.input_schema,
+        output_schema=request.output_schema,
+        required_capabilities=request.required_capabilities,
+        required_skills=request.required_skills,
+        visibility="public",
+        status="published",
+        deadline=request.deadline,
+    )
+    db.add(task)
+    db.flush()
+    _marketplace_event(db, task, "published", agent.id, {"title": task.title})
+    db.add(AuditEvent(event_type="marketplace_task_published", actor_id=agent.id, object_id=task.id, payload={"title": task.title}))
+    db.commit()
+    db.refresh(task)
+    return _marketplace_task_response(task)
+
+
+@app.get("/api/v1/tasks", response_model=MarketplaceTaskListResponse, tags=["task-marketplace"])
+def list_marketplace_tasks(
+    db: Annotated[Session, Depends(get_db)],
+    q: str | None = Query(default=None, min_length=1, max_length=120),
+    status: str = Query(default="published", pattern="^(published|claimed|running|submitted|accepted|rejected|cancelled)$"),
+    capability: str | None = Query(default=None, max_length=120),
+    skill: str | None = Query(default=None, max_length=240),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+) -> MarketplaceTaskListResponse:
+    query = select(MarketplaceTask).where(MarketplaceTask.visibility == "public", MarketplaceTask.status == status)
+    tasks = db.scalars(query.order_by(MarketplaceTask.created_at.desc())).all()
+    if q:
+        needle = q.casefold()
+        tasks = [task for task in tasks if needle in task.title.casefold() or needle in task.goal.casefold()]
+    if capability:
+        tasks = [task for task in tasks if capability in (task.required_capabilities or [])]
+    if skill:
+        tasks = [task for task in tasks if skill in (task.required_skills or [])]
+    visible = tasks[offset : offset + limit]
+    return MarketplaceTaskListResponse(items=[_marketplace_task_response(task) for task in visible], total=len(tasks))
+
+
+@app.get("/api/v1/tasks/{task_id}", response_model=MarketplaceTaskResponse, tags=["task-marketplace"])
+def get_marketplace_task(task_id: str, db: Annotated[Session, Depends(get_db)]) -> MarketplaceTaskResponse:
+    task = db.get(MarketplaceTask, task_id)
+    if task is None or task.visibility != "public":
+        raise HTTPException(status_code=404, detail="task_not_found")
+    return _marketplace_task_response(task)
+
+
+@app.post("/api/v1/tasks/{task_id}/claim", response_model=MarketplaceTaskResponse, tags=["task-marketplace"])
+def claim_marketplace_task(
+    task_id: str,
+    db: Annotated[Session, Depends(get_db)],
+    agent: Annotated[Agent, Depends(get_agent_identity)],
+) -> MarketplaceTaskResponse:
+    task = db.scalar(select(MarketplaceTask).where(MarketplaceTask.id == task_id).with_for_update())
+    if task is None or task.visibility != "public":
+        raise HTTPException(status_code=404, detail="task_not_found")
+    if task.claimed_by_agent_id == agent.id:
+        return _marketplace_task_response(task)
+    if task.status != "published" or task.claimed_by_agent_id:
+        raise HTTPException(status_code=409, detail="task_already_claimed")
+    task.claimed_by_agent_id = agent.id
+    task.status = "claimed"
+    _marketplace_event(db, task, "claimed", agent.id, {"agent_id": agent.id})
+    db.add(AuditEvent(event_type="marketplace_task_claimed", actor_id=agent.id, object_id=task.id, payload={"agent_id": agent.id}))
+    db.commit()
+    db.refresh(task)
+    return _marketplace_task_response(task)
+
+
+@app.post("/api/v1/tasks/{task_id}/submit", response_model=MarketplaceTaskResponse, tags=["task-marketplace"])
+def submit_marketplace_task(
+    task_id: str,
+    request: MarketplaceSubmissionRequest,
+    db: Annotated[Session, Depends(get_db)],
+    agent: Annotated[Agent, Depends(get_agent_identity)],
+) -> MarketplaceTaskResponse:
+    task = db.get(MarketplaceTask, task_id)
+    if task is None or task.claimed_by_agent_id != agent.id:
+        raise HTTPException(status_code=403, detail="task_claim_required")
+    if task.status in {"accepted", "rejected", "cancelled"}:
+        raise HTTPException(status_code=409, detail="task_terminal")
+    task.status = "submitted"
+    task.submission = {"summary": request.summary, "result": request.result, "agent_id": agent.id}
+    _marketplace_event(db, task, "submitted", agent.id, task.submission)
+    db.add(AuditEvent(event_type="marketplace_task_submitted", actor_id=agent.id, object_id=task.id, payload={"summary": request.summary}))
+    db.commit()
+    db.refresh(task)
+    return _marketplace_task_response(task)
+
+
+@app.post("/api/v1/tasks/{task_id}/evaluate", response_model=MarketplaceTaskResponse, tags=["task-marketplace"])
+def evaluate_marketplace_task(
+    task_id: str,
+    request: MarketplaceEvaluationRequest,
+    db: Annotated[Session, Depends(get_db)],
+    agent: Annotated[Agent, Depends(get_agent_identity)],
+) -> MarketplaceTaskResponse:
+    task = db.get(MarketplaceTask, task_id)
+    if task is None or task.owner_agent_id != agent.id:
+        raise HTTPException(status_code=403, detail="task_owner_required")
+    if task.status != "submitted":
+        raise HTTPException(status_code=409, detail="task_submission_required")
+    task.status = "accepted" if request.accepted else "rejected"
+    task.evaluation = {"accepted": request.accepted, "comment": request.comment, "agent_id": agent.id}
+    _marketplace_event(db, task, task.status, agent.id, task.evaluation)
+    db.add(AuditEvent(event_type=f"marketplace_task_{task.status}", actor_id=agent.id, object_id=task.id, payload=task.evaluation))
+    db.commit()
+    db.refresh(task)
+    return _marketplace_task_response(task)
+
+
+@app.get("/api/v1/tasks/{task_id}/events", response_model=list[dict[str, Any]], tags=["task-marketplace"])
+def list_marketplace_task_events(task_id: str, db: Annotated[Session, Depends(get_db)]) -> list[dict[str, Any]]:
+    if db.get(MarketplaceTask, task_id) is None:
+        raise HTTPException(status_code=404, detail="task_not_found")
+    events = db.scalars(select(MarketplaceTaskEvent).where(MarketplaceTaskEvent.task_id == task_id).order_by(MarketplaceTaskEvent.id.asc())).all()
+    return [{"id": event.id, "type": event.event_type, "agent_id": event.agent_id, "payload": event.payload, "created_at": event.created_at} for event in events]
 
 
 @app.get("/api/v1/collaboration/teams", tags=["collaboration"])
@@ -1754,6 +2004,12 @@ MCP_WRITE_TOOLS = {
     "collab.cancel",
     "collab.verify_artifact",
 }
+MCP_AGENT_WRITE_TOOLS = {
+    "task.publish",
+    "task.claim",
+    "task.submit",
+    "task.evaluate",
+}
 
 
 def _mcp_contract() -> dict[str, Any]:
@@ -1822,9 +2078,41 @@ def _mcp_tool_result(
     *,
     db: Session,
     identity: ActorIdentity | None,
+    agent: Agent | None = None,
 ) -> Any:
     if name in MCP_WRITE_TOOLS:
         identity = _mcp_require_identity(identity)
+    if name in MCP_AGENT_WRITE_TOOLS and agent is None:
+        raise HTTPException(status_code=401, detail="agent_token_required")
+    if name == "agent.register":
+        request = AgentRegisterRequest.model_validate(arguments)
+        return register_agent(request, db=db, identity=identity)
+    if name == "agent.list":
+        return list_agents(db)
+    if name == "task.publish":
+        return publish_marketplace_task(MarketplaceTaskCreateRequest.model_validate(arguments), db=db, agent=agent)
+    if name == "task.search":
+        return list_marketplace_tasks(
+            db=db,
+            q=arguments.get("q"),
+            status=arguments.get("status", "published"),
+            capability=arguments.get("capability"),
+            skill=arguments.get("skill"),
+            limit=arguments.get("limit", 20),
+            offset=arguments.get("offset", 0),
+        )
+    if name == "task.get":
+        return get_marketplace_task(arguments["task_id"], db=db)
+    if name == "task.claim":
+        return claim_marketplace_task(arguments["task_id"], db=db, agent=agent)
+    if name == "task.submit":
+        request = MarketplaceSubmissionRequest.model_validate({key: value for key, value in arguments.items() if key != "task_id"})
+        return submit_marketplace_task(arguments["task_id"], request, db=db, agent=agent)
+    if name == "task.evaluate":
+        request = MarketplaceEvaluationRequest.model_validate({key: value for key, value in arguments.items() if key != "task_id"})
+        return evaluate_marketplace_task(arguments["task_id"], request, db=db, agent=agent)
+    if name == "task.events":
+        return list_marketplace_task_events(arguments["task_id"], db=db)
     if name == "registry.search":
         result = list_artifacts(
             db=db,
@@ -1978,6 +2266,7 @@ def mcp_endpoint(
     payload: dict[str, Any],
     db: Annotated[Session, Depends(get_db)],
     identity: Annotated[ActorIdentity | None, Depends(get_optional_identity)],
+    agent: Annotated[Agent | None, Depends(get_optional_agent_identity)],
 ) -> Response | dict[str, Any]:
     request_id = payload.get("id")
     if payload.get("jsonrpc") != "2.0" or not isinstance(payload.get("method"), str):
@@ -2011,7 +2300,7 @@ def mcp_endpoint(
         if not isinstance(name, str):
             raise ValueError("tool_name_required")
         arguments = _mcp_validate_arguments(name, params.get("arguments"))
-        value = _mcp_tool_result(name, arguments, db=db, identity=identity)
+        value = _mcp_tool_result(name, arguments, db=db, identity=identity, agent=agent)
         structured = _mcp_json(value)
         return _mcp_response(
             request_id,

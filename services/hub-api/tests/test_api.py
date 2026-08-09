@@ -1017,3 +1017,75 @@ def test_collaboration_task_lifecycle_is_idempotent_and_audited(client: TestClie
     assert repeated_cancel.status_code == 200
     assert repeated_cancel.json() == cancelled.json()
     assert len(matrix.sent) == cancel_sent_count
+
+
+def test_agent_task_marketplace_autonomous_claim_submit_and_accept(client: TestClient):
+    publisher = client.post(
+        "/api/v1/agents/register",
+        json={
+            "name": "publisher-agent",
+            "description": "Publishes internal tasks",
+            "capabilities": ["document.extract"],
+            "skills": ["contract-analysis"],
+        },
+    )
+    assert publisher.status_code == 200
+    publisher_token = publisher.json()["token"]
+    worker = client.post(
+        "/api/v1/agents/register",
+        json={
+            "name": "worker-agent",
+            "capabilities": ["document.extract", "report.generate"],
+            "skills": ["contract-analysis"],
+        },
+    )
+    assert worker.status_code == 200
+    worker_token = worker.json()["token"]
+
+    public_agents = client.get("/api/v1/agents")
+    assert public_agents.status_code == 200
+    assert {item["name"] for item in public_agents.json()["items"]} >= {"publisher-agent", "worker-agent"}
+
+    created = client.post(
+        "/api/v1/tasks",
+        headers={"X-Agent-Token": publisher_token},
+        json={
+            "title": "Extract contract risks",
+            "goal": "Extract the risks and return a structured report.",
+            "required_capabilities": ["document.extract"],
+            "required_skills": ["contract-analysis"],
+            "output_schema": {"type": "object", "required": ["risks"]},
+        },
+    )
+    assert created.status_code == 200
+    task_id = created.json()["id"]
+
+    listed = client.get("/api/v1/tasks", params={"capability": "document.extract"})
+    assert listed.status_code == 200
+    assert listed.json()["items"][0]["id"] == task_id
+
+    claimed = client.post(f"/api/v1/tasks/{task_id}/claim", headers={"X-Agent-Token": worker_token})
+    assert claimed.status_code == 200
+    assert claimed.json()["status"] == "claimed"
+    duplicate_claim = client.post(f"/api/v1/tasks/{task_id}/claim", headers={"X-Agent-Token": publisher_token})
+    assert duplicate_claim.status_code == 409
+
+    submitted = client.post(
+        f"/api/v1/tasks/{task_id}/submit",
+        headers={"X-Agent-Token": worker_token},
+        json={"summary": "Completed", "result": {"risks": ["missing approval"]}},
+    )
+    assert submitted.status_code == 200
+    assert submitted.json()["status"] == "submitted"
+
+    accepted = client.post(
+        f"/api/v1/tasks/{task_id}/evaluate",
+        headers={"X-Agent-Token": publisher_token},
+        json={"accepted": True, "comment": "Meets the output contract."},
+    )
+    assert accepted.status_code == 200
+    assert accepted.json()["status"] == "accepted"
+
+    events = client.get(f"/api/v1/tasks/{task_id}/events")
+    assert [event["type"] for event in events.json()] == ["published", "claimed", "submitted", "accepted"]
+    assert client.post(f"/api/v1/tasks/{task_id}/submit", headers={"X-Agent-Token": "invalid"}, json={}).status_code == 401

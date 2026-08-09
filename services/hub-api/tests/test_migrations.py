@@ -21,6 +21,9 @@ EXPECTED_TABLES = {
     "collaboration_artifact_verification",
     "collaboration_task",
     "publication_preview",
+    "agent",
+    "marketplace_task",
+    "marketplace_task_event",
 }
 
 
