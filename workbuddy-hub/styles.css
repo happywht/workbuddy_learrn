@@ -348,6 +348,31 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .skill-note { margin-top: 42px; padding: 24px 28px; border-left: 5px solid var(--blue); background: var(--ink); color: #fff; }
 .skill-note strong { font-size: 17px; }
 .skill-note p { margin: 5px 0 0; color: #bec8c3; font-size: 11px; }
+.marketplace-main { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; padding: 55px 0 76px; }
+.marketplace-hero { display: grid; grid-template-columns: minmax(0, 1fr) 285px; gap: 64px; align-items: end; padding: 16px 0 48px; border-bottom: 1px solid var(--ink); }
+.marketplace-hero h1 { max-width: 820px; margin: 16px 0 0; font-size: 48px; line-height: 1.08; }
+.marketplace-hero p { max-width: 740px; margin: 17px 0 0; color: var(--muted); font-size: 15px; }
+.marketplace-live, .marketplace-guide { padding-top: 43px; }
+.marketplace-section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line-dark); padding-bottom: 14px; }
+.marketplace-section-head h2, .marketplace-guide h2 { margin: 7px 0 0; font-size: 29px; }
+.market-task-list { display: grid; gap: 10px; padding-top: 14px; }
+.market-task { display: flex; justify-content: space-between; gap: 24px; padding: 18px 20px; border: 1px solid var(--line); background: var(--surface); }
+.market-task h3 { margin: 4px 0 4px; font-size: 18px; }
+.market-task p { margin: 0; color: var(--muted); font-size: 13px; }
+.market-task > code { flex: 0 0 auto; color: var(--blue); font-size: 11px; }
+.market-task-status { color: var(--green); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.marketplace-guide h2 { padding-bottom: 14px; border-bottom: 1px solid var(--line-dark); }
+.market-step { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 18px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.market-step-index { color: var(--coral-dark); font: 700 18px/1 Consolas, monospace; }
+.market-step h3 { margin: 0; font-size: 19px; }
+.market-step p { margin: 5px 0 12px; color: var(--muted); font-size: 13px; }
+.market-step code { color: var(--blue); font-family: Consolas, monospace; font-size: 12px; }
+.code-box { position: relative; }
+.code-box pre { margin: 0; padding: 17px 72px 17px 17px; overflow-x: auto; background: #202526; color: #eff4ef; font: 12px/1.7 Consolas, "Microsoft YaHei", monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-box pre code { color: inherit; }
+.copy-code { position: absolute; top: 9px; right: 9px; z-index: 1; min-height: 32px; padding: 5px 9px; border: 1px solid #6d7b78; border-radius: 4px; background: transparent; color: #fff; font-size: 11px; }
+.copy-code:hover { background: #35413f; }
+.marketplace-boundary { margin-top: 42px; }
 .collab-main { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; padding: 55px 0 76px; }
 .collab-head { display: grid; grid-template-columns: minmax(0, 1fr) 285px; gap: 64px; align-items: end; padding: 16px 0 48px; border-bottom: 1px solid var(--ink); }
 .collab-head h1 { max-width: 820px; margin: 16px 0 0; font-size: 48px; line-height: 1.08; }
@@ -496,14 +521,14 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .chapter-sidebar { border-top: 1px solid var(--line); border-left: 0; }
   .chapter-sidebar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; }
   .chapter-sidebar h2 { grid-column: 1 / -1; }
-  .community-hero, .contribute-hero, .skill-hero, .collab-head { grid-template-columns: 1fr; gap: 28px; }
+  .community-hero, .contribute-hero, .skill-hero, .collab-head, .marketplace-hero { grid-template-columns: 1fr; gap: 28px; }
   .community-summary { max-width: 360px; }
   .case-detail-layout { grid-template-columns: 170px minmax(0, 1fr); gap: 32px; }
   .contribute-steps { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 760px) {
-  .header-inner, .portal-main, .route-hero-inner, .route-shell, .resource-head, .footer-inner, .community-main, .case-detail-main, .contribute-main, .skill-main, .collab-main { width: min(100% - 32px, var(--max)); }
+  .header-inner, .portal-main, .route-hero-inner, .route-shell, .resource-head, .footer-inner, .community-main, .case-detail-main, .contribute-main, .skill-main, .collab-main, .marketplace-main { width: min(100% - 32px, var(--max)); }
   .header-inner { min-height: 61px; gap: 8px; }
   .brand { min-width: 0; }
   .brand-copy span, .header-context { display: none; }
@@ -531,9 +556,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .contribute-section { margin-top: 38px; padding: 23px 20px; grid-template-columns: 1fr; gap: 19px; }
   .contribute-section h2 { font-size: 23px; }
   .contribute-section .button { width: 100%; }
-  .community-main, .contribute-main, .skill-main, .collab-main { padding-top: 35px; }
+  .community-main, .contribute-main, .skill-main, .collab-main, .marketplace-main { padding-top: 35px; }
   .community-hero, .contribute-hero, .skill-hero, .collab-head { gap: 24px; padding-top: 10px; padding-bottom: 36px; }
-  .community-hero h1, .contribute-hero h1, .skill-hero h1, .collab-head h1 { font-size: 40px; }
+  .community-hero h1, .contribute-hero h1, .skill-hero h1, .collab-head h1, .marketplace-hero h1 { font-size: 40px; }
   .community-hero p, .contribute-hero > div:first-child > p { font-size: 14px; }
   .community-summary { max-width: none; }
   .community-summary strong { font-size: 48px; }
@@ -549,6 +574,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .community-contribute .button { width: 100%; margin-top: 16px; }
   .skill-browser-head { display: block; }
   .skill-browser-head h2 { font-size: 25px; }
+  .marketplace-section-head { align-items: flex-start; flex-direction: column; }
+  .market-task { flex-direction: column; gap: 8px; }
+  .market-step { grid-template-columns: 40px minmax(0, 1fr); gap: 10px; }
   .skill-search { width: 100%; margin-top: 17px; }
   .skill-row { grid-template-columns: 1fr; gap: 20px; }
   .skill-row-actions { justify-content: stretch; }

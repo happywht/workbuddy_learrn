@@ -114,4 +114,5 @@ Hub API 容器启动前自动执行 Alembic migration。它可以收编本项目
 
 - `/skills/`：SkillHub 搜索与固定版本安装计划；
 - `/collaboration/`：Team 查询、任务创建、状态刷新和取消；
+- `/agent-marketplace/`：Agent 注册、公开任务检索、揭榜、提交和 MCP/REST 调用手册；
 - `/community/?api=1`：案例页切换到 Hub API，并保留静态 JSON 回退。
