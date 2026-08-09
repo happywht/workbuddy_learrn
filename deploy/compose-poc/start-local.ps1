@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [int]$HubPort = 8100,
+    [int]$PortalPort = 4173,
     [int]$PostgresPort = 55432,
     [string]$ProjectName = "workbuddy-hub-local"
 )
@@ -23,6 +24,7 @@ if (-not (Test-Path -LiteralPath $envFile)) {
     $localPassword = -join ($passwordBytes | ForEach-Object { $_.ToString("x2") })
     @(
         "HUB_PORT=$HubPort"
+        "PORTAL_PORT=$PortalPort"
         "POSTGRES_PORT=$PostgresPort"
         "POSTGRES_PASSWORD=$localPassword"
         "AUTH_MODE=local_header"
@@ -49,12 +51,16 @@ try {
         throw "Docker Compose failed to start. Run 'docker compose logs hub-api' for details."
     }
     & docker @composeArgs ps
+    $portalQuery = if ($HubPort -eq 8100) { "" } else { "?apiBase=http://127.0.0.1:$HubPort" }
     Write-Host ""
     Write-Host "Hub API:     http://127.0.0.1:$HubPort"
+    Write-Host "Portal:      http://127.0.0.1:$PortalPort"
+    Write-Host "SkillHub UI: http://127.0.0.1:$PortalPort/skills/$portalQuery"
+    Write-Host "AgentTeams:  http://127.0.0.1:$PortalPort/collaboration/$portalQuery"
     Write-Host "API docs:    http://127.0.0.1:$HubPort/docs"
     Write-Host "Health:      http://127.0.0.1:$HubPort/health"
     Write-Host "Smoke test:  python deploy/compose-poc/smoke.py http://127.0.0.1:$HubPort"
-    Write-Host "Portal API:  add '?api=1' to the local WorkBuddy case page"
+    Write-Host "Local actor: local-dev (injected only on localhost)"
 }
 finally {
     Pop-Location

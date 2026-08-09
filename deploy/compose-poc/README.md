@@ -1,6 +1,6 @@
 # WorkBuddy Hub PoC
 
-此 Compose 只启动 Hub API 和它自己的 PostgreSQL。SkillHub、AgentTeams 各自拥有数据库、对象存储和网络边界，不能把它们的生产容器直接合并到这个文件中。
+此 Compose 启动本地门户、Hub API 和 Hub 自己的 PostgreSQL。SkillHub、AgentTeams 各自拥有数据库、对象存储和网络边界，不能把它们的生产容器直接合并到这个文件中。
 
 ## 启动
 
@@ -12,7 +12,12 @@
 .\deploy\compose-poc\start-local.ps1
 ```
 
-脚本会检查 Docker Desktop，首次运行自动生成被 Git 忽略的本地 PostgreSQL 密码，使用独立 Compose 项目启动 Hub 和 PostgreSQL，等待健康检查并自动执行迁移。默认不需要 SkillHub、AgentTeams、OIDC 或任何外部凭据；这些服务未配置时，Hub 会返回明确的“适配器未配置”状态。
+脚本会检查 Docker Desktop，首次运行自动生成被 Git 忽略的本地 PostgreSQL 密码，使用独立 Compose 项目启动门户、Hub 和 PostgreSQL，等待健康检查并自动执行迁移。默认不需要 SkillHub、AgentTeams、OIDC 或任何外部凭据；localhost 页面会自动连接 `http://127.0.0.1:8100` 并使用仅限本地的 `local-dev` 身份。这些上游服务未配置时，页面会显示明确的“适配器未配置”状态。
+
+启动后直接打开：
+
+- Skill 中心：`http://127.0.0.1:4173/skills/`
+- Agent 协作室：`http://127.0.0.1:4173/collaboration/`
 
 停止本地服务（保留数据库 volume）：
 
@@ -20,11 +25,13 @@
 .\deploy\compose-poc\stop-local.ps1
 ```
 
-默认端口是 Hub `8100`、PostgreSQL `55432`。端口被占用时可指定：
+默认端口是门户 `4173`、Hub `8100`、PostgreSQL `55432`。端口被占用时可指定：
 
 ```powershell
-.\deploy\compose-poc\start-local.ps1 -HubPort 18100 -PostgresPort 55433
+.\deploy\compose-poc\start-local.ps1 -PortalPort 14173 -HubPort 18100 -PostgresPort 55433
 ```
+
+非默认 Hub 端口会由启动脚本写入页面链接的 `apiBase` 查询参数；localhost 之外不会自动注入本地身份。
 
 启动后先运行：
 

@@ -1,6 +1,19 @@
 name: workbuddy-hub-poc
 
 services:
+  portal:
+    image: python:3.12-alpine@sha256:6d43704baacd1bfbe7c295d7f13079d5d8104ed33568873133f8fc69980419df
+    command: ["python", "-m", "http.server", "4173", "--bind", "0.0.0.0", "--directory", "/srv"]
+    ports:
+      - "${PORTAL_PORT:-4173}:4173"
+    volumes:
+      - ../../workbuddy-hub:/srv:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4173/skills/')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   postgres:
     image: postgres:16-alpine
     environment:

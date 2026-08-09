@@ -15,7 +15,7 @@
     <nav class="header-actions" aria-label="页面导航"><a class="header-link mobile-keep" href="../index.html">学习中心</a><a class="header-link" href="../community/index.html">案例社区</a><a class="header-link" href="../skills/index.html">Skill 中心</a></nav>
   </div></header>
   <main id="main" class="collab-main">
-    <section class="collab-head"><div><div class="eyebrow">Agent collaboration</div><h1>把任务交给一个可见的协作室</h1><p>任务创建后保留 Hub ID、Matrix 投递事件、房间、Hub 状态和事件游标。连接中断不会把等待状态伪装成完成。</p></div><div class="skill-connection"><span class="status-dot" id="collab-status-dot"></span><strong id="collab-status">等待连接</strong><small id="collab-status-note">需要 Hub API 和登录身份</small></div></section>
+    <section class="collab-head"><div><div class="eyebrow">Agent collaboration</div><h1>把任务交给一个可见的协作室</h1><p>任务创建后保留 Hub ID、Matrix 投递事件、房间、Hub 状态和事件游标。连接中断不会把等待状态伪装成完成。</p></div><div class="skill-connection"><span class="status-dot" id="collab-status-dot"></span><strong id="collab-status">正在连接 Hub API</strong><small id="collab-status-note">正在加载本地开发身份</small></div></section>
     <section class="collab-workspace">
       <form id="collab-form" class="collab-form"><div class="content-kicker">Create / 创建任务</div><h2>新建协作任务</h2><label>协作 Team<select id="collab-team" required><option value="">先连接并读取 Team</option></select></label><label>任务目标<textarea id="collab-goal" rows="7" maxlength="4000" required placeholder="说明目标、边界和期望产物"></textarea></label><button type="submit" class="button button-primary">创建任务</button></form>
       <section class="collab-task" aria-live="polite"><div class="content-kicker">Status / 任务状态</div><div id="collab-task-body" class="collab-task-empty">尚未创建任务。</div></section>

@@ -20,6 +20,23 @@
     statusDot.classList.toggle('is-online', connected);
   };
 
+  const responseError = async response => {
+    const payload = await response.json().catch(() => ({}));
+    const error = new Error(payload.detail || `HTTP ${response.status}`);
+    error.code = payload.detail;
+    return error;
+  };
+
+  const showUnavailable = error => {
+    if (error.code === 'skillhub_adapter_not_configured') {
+      setStatus(false, 'SkillHub 未配置', 'Hub API 已连接 · skillhub_adapter_not_configured');
+      resultsRoot.innerHTML = '<div class="skill-empty">本地 Hub 已连接，但尚未配置外部 SkillHub 服务。</div>';
+      return;
+    }
+    setStatus(false, 'SkillHub 暂不可用', error.message || '请稍后重试');
+    resultsRoot.innerHTML = '<div class="skill-empty">查询失败。请检查 Hub API 和 SkillHub 状态。</div>';
+  };
+
   const render = items => {
     if (!items.length) {
       resultsRoot.innerHTML = '<div class="skill-empty">没有找到可访问的 Skill。</div>';
@@ -40,14 +57,20 @@
     resultsRoot.innerHTML = '<div class="skill-empty">正在查询 SkillHub...</div>';
     try {
       const response = await fetch(`${apiBase}/api/v1/artifacts?kind=skill&q=${encodeURIComponent(query)}&limit=50`, {headers: actorHeaders()});
+      if (!response.ok) throw await responseError(response);
       const payload = await response.json();
-      if (!response.ok) throw new Error(payload.detail || `HTTP ${response.status}`);
       setStatus(true, 'Hub API 已连接', '结果经过 SkillHub 权限边界过滤');
       render(payload.items || []);
-    } catch (error) {
-      setStatus(false, 'SkillHub 暂不可用', error.message || '请稍后重试');
-      resultsRoot.innerHTML = '<div class="skill-empty">查询失败。请检查连接、身份和 SkillHub 状态。</div>';
-    }
+    } catch (error) { showUnavailable(error); }
+  };
+
+  const probe = async () => {
+    if (!apiBase) return;
+    try {
+      const response = await fetch(`${apiBase}/api/v1/skills?q=workbuddy&limit=1`, {headers: actorHeaders()});
+      if (!response.ok) throw await responseError(response);
+      setStatus(true, 'SkillHub 已连接', '通过本地 Hub API 访问');
+    } catch (error) { showUnavailable(error); }
   };
 
   form.addEventListener('submit', event => { event.preventDefault(); const query = queryInput.value.trim(); if (query) search(query); });
@@ -59,10 +82,11 @@
       const response = await fetch(`${apiBase}/api/v1/artifacts/${encodeURIComponent(button.dataset.artifactId)}/install-plans`, {
         method: 'POST', headers: {'Content-Type': 'application/json', ...actorHeaders()}, body: JSON.stringify({slug: button.dataset.slug, target_agent: 'workbuddy'})
       });
+      if (!response.ok) throw await responseError(response);
       const payload = await response.json();
-      if (!response.ok) throw new Error(payload.detail || `HTTP ${response.status}`);
       window.alert(`版本 ${payload.version} 已固定。\n校验和：${payload.sha256}\n\n安装目录：${payload.install_directory}`);
     } catch (error) { window.alert(`安装计划生成失败：${error.message || '未知错误'}`); }
     finally { button.disabled = false; }
   });
+  probe();
 })();

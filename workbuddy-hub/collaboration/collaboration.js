@@ -27,8 +27,12 @@
   };
   const api = async (path, options = {}) => {
     const response = await fetch(`${apiBase}${path}`, {...options, headers: headers(options.headers || {})});
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.detail || `HTTP ${response.status}`);
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(payload.detail || `HTTP ${response.status}`);
+      error.code = payload.detail;
+      throw error;
+    }
     return payload;
   };
   const renderTask = task => {
@@ -99,7 +103,14 @@
       const readyTeams = teams.filter(team => team.hubDispatch?.ready);
       teamSelect.innerHTML = readyTeams.length ? readyTeams.map(team => `<option value="${escapeHtml(team.name)}">${escapeHtml(team.teamName || team.name)}</option>`).join('') : '<option value="">当前身份没有可投递的 Team</option>';
       setConnection(readyTeams.length > 0, readyTeams.length ? 'AgentTeams 已连接' : 'Matrix 投递未就绪', `${readyTeams.length} / ${teams.length} 个 Team 可投递`);
-    } catch (error) { setConnection(false, 'AgentTeams 暂不可用', error.message); }
+    } catch (error) {
+      if (error.code === 'agentteams_controller_not_configured') {
+        setConnection(false, 'AgentTeams 未配置', 'Hub API 已连接 · agentteams_controller_not_configured');
+        teamSelect.innerHTML = '<option value="">本地尚未配置 AgentTeams</option>';
+        return;
+      }
+      setConnection(false, 'AgentTeams 暂不可用', error.message);
+    }
   };
   form.addEventListener('submit', async event => {
     event.preventDefault(); if (!apiBase || !auth?.isAuthenticated || !teamSelect.value) return;
